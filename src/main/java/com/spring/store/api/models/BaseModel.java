@@ -29,7 +29,7 @@ public abstract class BaseModel {
 
     @Column
     @CreatedDate
-    private Date createdDate;
+    private String createdDate;
 
     @Column
     @LastModifiedBy
@@ -37,7 +37,7 @@ public abstract class BaseModel {
 
     @Column
     @LastModifiedDate
-    private Date modifiedDate;
+    private String modifiedDate;
 
     @Column
     private String status;
@@ -54,11 +54,11 @@ public abstract class BaseModel {
         this.createdBy = createdBy;
     }
 
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -70,11 +70,11 @@ public abstract class BaseModel {
         this.modifiedBy = modifiedBy;
     }
 
-    public Date getModifiedDate() {
+    public String getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(Date modifiedDate) {
+    public void setModifiedDate(String modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 

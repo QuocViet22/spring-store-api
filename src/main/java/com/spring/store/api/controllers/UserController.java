@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private AccountRepository accountRepository;
 
-    //    get User or getUser by Account_id
+    //    get User by Account_id
     @GetMapping({"/user/{id}", "/user/{id}/account"})
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
