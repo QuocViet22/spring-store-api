@@ -68,15 +68,14 @@ public class UserController {
         return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
     }
 
-//    //    delete User by id
-//    @DeleteMapping("/user/{id}")
-//    public ResponseEntity<HttpStatus> deleteDetails(@PathVariable("id") long id) {
-//        userRepository.deleteById(id);
-//
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
-//
-//    //    delete User of An Account
+    //    delete User by id
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<HttpStatus> deleteDetails(@PathVariable("id") long id) {
+        userRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //    delete User of An Account
 //    @DeleteMapping("/user/{userId}/account")
 //    public ResponseEntity<User> deleteDetailsOfTutorial(@PathVariable(value = "userId") Long accountId) {
 //        if (!accountRepository.existsById(accountId)) {
