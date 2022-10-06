@@ -1,6 +1,6 @@
 package com.spring.store.api.models;
 
-import com.sun.deploy.security.ValidationState;
+//import com.sun.deploy.security.ValidationState;
 
 import javax.persistence.*;
 
