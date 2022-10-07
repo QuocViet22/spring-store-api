@@ -1,6 +1,9 @@
 package com.spring.store.api.models;
 
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "category")
@@ -18,6 +21,8 @@ public class Category extends BaseModel {
     @Column(name = "status")
     private String status;
 
+    @OneToMany(mappedBy = "category")
+    private Set<Product> products;
     public Category() {
     }
 
@@ -59,4 +64,11 @@ public class Category extends BaseModel {
         this.status = status;
     }
 
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
 }

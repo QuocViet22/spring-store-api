@@ -23,17 +23,16 @@ public class UserController {
     private AccountRepository accountRepository;
 
     //    get User by Account_id
-    @GetMapping({"/user/{id}", "/user/{id}/account"})
+    @GetMapping({"/users/{id}"})
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found User with Account_id = " + id));
-
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     //    update User for User only
-    @PutMapping({"/user/{id}", "/user/{id}/account"})
+    @PutMapping({"/users/{id}"})
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable("id") long id,
                                            @RequestBody User userRequest) {
@@ -50,7 +49,7 @@ public class UserController {
     }
 
     //    update User for Moderator
-    @PutMapping({"/user/{id}/mod", "/user/{id}/account/mod"})
+    @PutMapping({"/users/{id}/mod"})
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<User> updateUserByMod(@PathVariable("id") long id,
                                                 @RequestBody User userRequest) {
@@ -69,14 +68,14 @@ public class UserController {
     }
 
     //    delete User by id
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<HttpStatus> deleteDetails(@PathVariable("id") long id) {
-        userRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @DeleteMapping("/users/{id}")
+//    public ResponseEntity<HttpStatus> deleteDetails(@PathVariable("id") long id) {
+//        userRepository.deleteById(id);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
     //    delete User of An Account
-//    @DeleteMapping("/user/{userId}/account")
+//    @DeleteMapping("/users/{userId}/account")
 //    public ResponseEntity<User> deleteDetailsOfTutorial(@PathVariable(value = "userId") Long accountId) {
 //        if (!accountRepository.existsById(accountId)) {
 //            throw new ResourceNotFoundException("Not found User with id = " + accountId);

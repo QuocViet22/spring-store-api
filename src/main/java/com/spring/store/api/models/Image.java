@@ -13,8 +13,8 @@ public class Image extends BaseModel{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "link-image")
-    private String linkImage;
+    @Column(name = "link")
+    private String link;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
@@ -25,8 +25,8 @@ public class Image extends BaseModel{
     public Image() {
     }
 
-    public Image(String linkImage, Product product) {
-        this.linkImage = linkImage;
+    public Image(String link, Product product) {
+        this.link = link;
         this.product = product;
     }
 
@@ -40,12 +40,12 @@ public class Image extends BaseModel{
         this.id = id;
     }
 
-    public String getLinkImage() {
-        return linkImage;
+    public String getLink() {
+        return link;
     }
 
-    public void setLinkImage(String linkImage) {
-        this.linkImage = linkImage;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public Product getProduct() {

@@ -34,6 +34,10 @@ public class Product extends BaseModel{
     @JsonIgnore
     private Category category;
 
+
+    @OneToMany(mappedBy = "product")
+    private Set<Image> images;
+
     @Override
     public Long getId() {
         return id;
@@ -82,5 +86,13 @@ public class Product extends BaseModel{
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Set<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Image> images) {
+        this.images = images;
     }
 }

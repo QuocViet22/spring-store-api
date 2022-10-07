@@ -37,6 +37,7 @@ public class AccountController {
         return accountRepository.findAll();
     }
 
+    //    get account by id
     @GetMapping("/accounts/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Account> getAccountById(@PathVariable("id") long id) {
@@ -46,6 +47,7 @@ public class AccountController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
+    //    update account for user
     @PutMapping("/accounts/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> updateAccount(@PathVariable("id") long id, @RequestBody Account accountRequest) {
@@ -57,8 +59,9 @@ public class AccountController {
         return ResponseEntity.ok().body(new MessageResponse("Account has been updated successfully!"));
     }
 
+    //    update account for mod
     @PutMapping("/accounts/{id}/mod")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> updateAccountByMod(@PathVariable("id") long id, @RequestBody Account accountRequest) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Account with id = " + id));

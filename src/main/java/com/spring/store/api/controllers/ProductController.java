@@ -36,7 +36,7 @@ public class ProductController {
     }
 
     //    retrieve a Product by product_id
-    @GetMapping("/products/{id}")
+    @GetMapping("/product/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Product> getProductsByCategoryId(@PathVariable(value = "id") Long id) {
         Product product = productRepository.findById(id)
@@ -45,7 +45,7 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    //    create new Product for a Category
+    //    create new Product of a Category
     @PostMapping("/category/{categoryId}/products")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Product> createProduct(@PathVariable(value = "categoryId") Long categoryId,
@@ -59,7 +59,7 @@ public class ProductController {
     }
 
     //    update a product by product_id
-    @PutMapping("/comments/{id}")
+    @PutMapping("/product/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(@PathVariable("id") long id, @RequestBody Product productRequest) {
         Product product = productRepository.findById(id)

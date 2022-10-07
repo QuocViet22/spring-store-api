@@ -66,7 +66,7 @@ public class ImageController {
         Image image = imageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Image Id " + id + "not found"));
 
-        image.setLinkImage(imageRequest.getLinkImage());
+        image.setLink(imageRequest.getLink()    );
         imageRepository.save(image);
         return ResponseEntity.ok().body(new MessageResponse("Image has been updated successfully!"));
     }
