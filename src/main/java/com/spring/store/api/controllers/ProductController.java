@@ -26,7 +26,7 @@ public class ProductController {
     //    get all products
     @GetMapping("/products")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
-    public List<Product> getAllCategory() {
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
