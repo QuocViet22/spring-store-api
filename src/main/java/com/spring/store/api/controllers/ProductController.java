@@ -23,6 +23,13 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    //    get all products
+    @GetMapping("/product")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    public List<Product> getAllCategory() {
+        return productRepository.findAll();
+    }
+
     //    retrieve all Products of a Category
     @GetMapping("/category/{categoryId}/products")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
