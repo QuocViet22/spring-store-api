@@ -22,14 +22,14 @@ public class CategoryController {
 
     //    get all categories
     @GetMapping("/category")
-    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public List<Category> getAllCategory() {
         return categoryRepository.findAll();
     }
 
     //    get Category by id
     @GetMapping("/category/{id}")
-    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Category> getTutorialById(@PathVariable("id") long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + id));
@@ -39,7 +39,7 @@ public class CategoryController {
 
     //    create a New Category
     @PostMapping("/category")
-    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Category> createTutorial(@RequestBody Category categoryRequest) {
         Category category = new Category();
         category.setName(categoryRequest.getName());
@@ -54,7 +54,7 @@ public class CategoryController {
     }
 
     //    update a category by id
-    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     @PutMapping("/category/{id}")
     public ResponseEntity<?> updateCategory(@PathVariable("id") long id, @RequestBody Category categoryRequest) {
         Category category = categoryRepository.findById(id)
