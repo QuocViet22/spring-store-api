@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
+import org.springframework.security.core.Authentication;
 
 import com.spring.store.api.security.services.AccountDetailsImpl;
 import io.jsonwebtoken.*;
@@ -37,8 +38,8 @@ public class JwtUtils {
     }
   }
 
-  public ResponseCookie generateJwtCookie(AccountDetailsImpl userPrincipal) {
-    String jwt = generateTokenFromUsername(userPrincipal.getUsername());
+  public ResponseCookie generateJwtCookie(AccountDetailsImpl accountPrincipal) {
+    String jwt = generateTokenFromUsername(accountPrincipal.getUsername());
     ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
     return cookie;
   }

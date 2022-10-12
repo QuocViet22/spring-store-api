@@ -71,6 +71,7 @@ public class AuthController {
         AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
 
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(accountDetails);
+        String jwt = jwtUtils.generateTokenFromUsername(loginRequest.getUsername());
 
         List<String> roles = accountDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
@@ -85,7 +86,7 @@ public class AuthController {
 //                        roles));
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new AccountInfoResponse(
-                        jwtCookie.toString(),
+                        jwt,
                         accountDetails.getId(),
                         accountDetails.getUsername(),
 //                    userDetails.getEmail(),
