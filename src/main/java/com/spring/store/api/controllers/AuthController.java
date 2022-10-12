@@ -67,7 +67,7 @@ public class AuthController {
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+		
         AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
 
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(accountDetails);
@@ -76,8 +76,17 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+//        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+//                .body(new AccountInfoResponse(
+//						accountDetails.getId(),
+//                        accountDetails.get
+//                        accountDetails.getUsername(),
+////                    userDetails.getEmail(),
+//                        roles));
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new AccountInfoResponse(accountDetails.getId(),
+                .body(new AccountInfoResponse(
+                        jwtCookie.toString(),
+                        accountDetails.getId(),
                         accountDetails.getUsername(),
 //                    userDetails.getEmail(),
                         roles));
