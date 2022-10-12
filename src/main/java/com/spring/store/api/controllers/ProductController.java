@@ -25,14 +25,14 @@ public class ProductController {
 
     //    get all products
     @GetMapping("/products")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
     //    retrieve all Products of a Category
     @GetMapping("/category/{categoryId}/products")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Product>> getAllProductsByCategoryId(@PathVariable(value = "categoryId") Long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new ResourceNotFoundException("Not found Category with id = " + categoryId);
@@ -44,7 +44,7 @@ public class ProductController {
 
     //    retrieve a Product by product_id
     @GetMapping("/product/{id}")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Product> getProductsByCategoryId(@PathVariable(value = "id") Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + id));
@@ -54,7 +54,7 @@ public class ProductController {
 
     //    create new Product of a Category
     @PostMapping("/category/{categoryId}/products")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Product> createProduct(@PathVariable(value = "categoryId") Long categoryId,
                                                  @RequestBody Product productRequest) {
         Product product = categoryRepository.findById(categoryId).map(category -> {
@@ -67,7 +67,7 @@ public class ProductController {
 
     //    update a product by product_id
     @PutMapping("/product/{id}")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(@PathVariable("id") long id, @RequestBody Product productRequest) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product Id " + id + "not found"));

@@ -24,7 +24,7 @@ public class UserController {
 
     //    get User by Account_id
     @GetMapping({"/users/{id}"})
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found User with Account_id = " + id));
@@ -33,7 +33,7 @@ public class UserController {
 
     //    update User for User only
     @PutMapping({"/users/{id}"})
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable("id") long id,
                                            @RequestBody User userRequest) {
         User user = userRepository.findById(id)
@@ -50,7 +50,7 @@ public class UserController {
 
     //    update User for Moderator
     @PutMapping({"/users/{id}/mod"})
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<User> updateUserByMod(@PathVariable("id") long id,
                                                 @RequestBody User userRequest) {
         User user = userRepository.findById(id)
