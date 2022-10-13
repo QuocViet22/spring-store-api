@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.store.api.models.ERole;
 import com.spring.store.api.models.Role;
+import com.spring.store.api.models.ERole;
 import com.spring.store.api.payload.request.LoginRequest;
 import com.spring.store.api.payload.request.SignupRequest;
 import com.spring.store.api.payload.response.AccountInfoResponse;

@@ -3,8 +3,8 @@ package com.spring.store.api.controllers;
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.User;
 import com.spring.store.api.payload.response.MessageResponse;
-import com.spring.store.api.repository.AccountRepository;
 import com.spring.store.api.repository.UserRepository;
+import com.spring.store.api.repository.AccountRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
