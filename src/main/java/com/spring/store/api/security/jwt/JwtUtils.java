@@ -29,29 +29,29 @@ public class JwtUtils {
     @Value("${app.jwtCookieName}")
     private String jwtCookie;
 
-//  public String getJwtFromCookies(HttpServletRequest request) {
-//    Cookie cookie = WebUtils.getCookie(request, jwtCookie);
-//    if (cookie != null) {
-//      return cookie.getValue();
-//    } else {
-//      return null;
-//    }
-//  }
+    public String getJwtFromCookies(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request, jwtCookie);
+        if (cookie != null) {
+            return cookie.getValue();
+        } else {
+            return null;
+        }
+    }
 
-//  public ResponseCookie generateJwtCookie(AccountDetailsImpl accountPrincipal) {
-//    String jwt = generateTokenFromUsername(accountPrincipal.getUsername());
-//    ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
-//    return cookie;
-//  }
+    public ResponseCookie generateJwtCookie(AccountDetailsImpl accountPrincipal) {
+        String jwt = generateTokenFromUsername(accountPrincipal.getUsername());
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
+        return cookie;
+    }
 
-//    public String generateTokenFromUsername(String username) {
-//    return Jwts.builder()
-//        .setSubject(username)
-//        .setIssuedAt(new Date())
-//        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-//        .signWith(SignatureAlgorithm.HS512, jwtSecret)
-//        .compact();
-//  }
+    public String generateTokenFromUsername(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
 
     public String generateJwtToken(Authentication authentication) {
 

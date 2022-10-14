@@ -32,20 +32,36 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            String jwtPostMan = parseJwtForPostMan(request);
+            if (jwt != null && jwtUtils.validateJwtToken(jwt) /*&& jwtPostMan != null && jwtUtils.validateJwtToken(jwtPostMan)*/) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
+//                String usernamePostMan = jwtUtils.getUserNameFromJwtToken(jwtPostMan);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+//                UserDetails userDetailsPostMan = userDetailsService.loadUserByUsername(usernamePostMan);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails,
                                 null,
                                 userDetails.getAuthorities());
-
+//                UsernamePasswordAuthenticationToken authenticationPostMan =
+//                        new UsernamePasswordAuthenticationToken(userDetailsPostMan,
+//                                null,
+//                                userDetailsPostMan.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
+//                authenticationPostMan.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+//                SecurityContextHolder.getContext().setAuthentication(authenticationPostMan);
             }
+            if (jwtPostMan != null && jwtUtils.validateJwtToken(jwtPostMan)) {
+                String usernamePostMan = jwtUtils.getUserNameFromJwtToken(jwtPostMan);
+                UserDetails userDetailsPostMan = userDetailsService.loadUserByUsername(usernamePostMan);
+                UsernamePasswordAuthenticationToken authenticationPostMan =
+                        new UsernamePasswordAuthenticationToken(userDetailsPostMan,
+                                null,
+                                userDetailsPostMan.getAuthorities());
+                authenticationPostMan.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationPostMan);
+            }
+
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
         }
@@ -53,10 +69,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-//  private String parseJwt(HttpServletRequest request) {
-//    String jwt = jwtUtils.getJwtFromCookies(request);
-//    return jwt;
-//  }
+    private String parseJwtForPostMan(HttpServletRequest request) {
+        String jwt = jwtUtils.getJwtFromCookies(request);
+        return jwt;
+    }
 
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");

@@ -70,7 +70,7 @@ public class AuthController {
 
         AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
 
-//        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(accountDetails);
+        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(accountDetails);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         List<String> roles = accountDetails.getAuthorities().stream()
@@ -84,7 +84,7 @@ public class AuthController {
 //                        accountDetails.getUsername(),
 ////                    userDetails.getEmail(),
 //                        roles));
-        return ResponseEntity.ok()/*.header(HttpHeaders.SET_COOKIE, jwt)*/
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new AccountInfoResponse(
                         jwt,
                         accountDetails.getId(),
