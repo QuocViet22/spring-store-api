@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.User;
 import com.spring.store.api.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -106,7 +107,7 @@ public class AuthController {
 //     Create new account's account
         Account account = new Account(signUpRequest.getUsername(),
 //                         signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+        encoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();

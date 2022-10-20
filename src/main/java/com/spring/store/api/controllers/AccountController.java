@@ -49,7 +49,7 @@ public class AccountController {
 
     //    get account by id
     @GetMapping("/accounts/{id}")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Account> getAccountById(@PathVariable("id") long id) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Account with id = " + id));
@@ -57,13 +57,23 @@ public class AccountController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
+    //    check password account
+//    @GetMapping("/accounts/{id}/password")
+//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+//    public ResponseEntity<?> checkAccountPw(@PathVariable("id") long id, @RequestBody Account accountRequest) {
+//        Account account = accountRepository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Not found Account with id = " + id));
+//        String currentAccount = encoder.encode(account.getPassword());
+//        if (currentAccount == )
+//        return ResponseEntity.ok().body(new MessageResponse("Account has been updated successfully!"));
+//    }
+
     //    update account for user
     @PutMapping("/accounts/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> updateAccount(@PathVariable("id") long id, @RequestBody Account accountRequest) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Account with id = " + id));
-
         account.setPassword(encoder.encode(accountRequest.getPassword()));
         accountRepository.save(account);
         return ResponseEntity.ok().body(new MessageResponse("Account has been updated successfully!"));

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
@@ -22,9 +24,16 @@ public class UserController {
     @Autowired
     private AccountRepository accountRepository;
 
+    //    get all accounts
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public List<User> getAllAccounts() {
+        return userRepository.findAll();
+    }
+
     //    get User by Account_id
     @GetMapping({"/users/{id}"})
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found User with Account_id = " + id));
