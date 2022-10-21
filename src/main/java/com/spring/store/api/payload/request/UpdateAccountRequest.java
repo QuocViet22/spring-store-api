@@ -7,9 +7,27 @@ import javax.validation.constraints.*;
 public class UpdateAccountRequest {
     @NotBlank
     @Size(min = 3, max = 20)
+    private String currentPassword;
+    private String newPassword;
     private String password;
     private String status;
     private Set<String> role;
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
+
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
 
     public String getPassword() {
         return password;
