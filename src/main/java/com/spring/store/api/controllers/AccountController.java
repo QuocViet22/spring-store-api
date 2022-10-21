@@ -73,12 +73,18 @@ public class AccountController {
 
     //    update account for mod
     @PutMapping("/accounts/{id}/mod")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateAccountByMod(@PathVariable("id") long id,
                                                 @RequestBody UpdateAccountRequest updateAccountRequest) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Account with id = " + id));
         account.setPassword(encoder.encode(updateAccountRequest.getPassword()));
+        if (updateAccountRequest.getPassword() == null) {
+            account.setPassword(account.getPassword());
+        }
+        else {
+            account.setPassword(updateAccountRequest.getPassword());
+        }
         account.setStatus(updateAccountRequest.getStatus());
 //        account.setRoles(updateAccountRequest.getRole());
         // update Role for user account
