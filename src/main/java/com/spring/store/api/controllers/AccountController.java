@@ -78,12 +78,13 @@ public class AccountController {
                                                 @RequestBody UpdateAccountRequest updateAccountRequest) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Account with id = " + id));
-        account.setPassword(encoder.encode(updateAccountRequest.getPassword()));
-        if (updateAccountRequest.getPassword() == null) {
+
+//        Update password
+        String newPassword = encoder.encode(updateAccountRequest.getPassword());
+        if (newPassword != account.getPassword()) {
+            account.setPassword(newPassword);
+        } else {
             account.setPassword(account.getPassword());
-        }
-        else {
-            account.setPassword(updateAccountRequest.getPassword());
         }
         account.setStatus(updateAccountRequest.getStatus());
 //        account.setRoles(updateAccountRequest.getRole());
