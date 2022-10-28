@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "products")
-public class Product extends BaseModel{
+public class Product extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -95,4 +95,5 @@ public class Product extends BaseModel{
     public void setImages(Set<Image> images) {
         this.images = images;
     }
+
 }

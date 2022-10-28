@@ -5,7 +5,6 @@ import com.spring.store.api.models.Image;
 import com.spring.store.api.payload.response.MessageResponse;
 import com.spring.store.api.repository.ImageRepository;
 import com.spring.store.api.repository.ProductRepository;
-import com.spring.store.api.models.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

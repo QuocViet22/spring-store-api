@@ -3,6 +3,7 @@ package com.spring.store.api.models;
 //import com.sun.deploy.security.ValidationState;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -40,19 +41,10 @@ public class User {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public User() {
-    }
+    @OneToMany(mappedBy = "user")
+    private Set<User> user;
 
-    public User(String name, String age, String gender, String address, String phone, String email, String type, String status, Account account) {
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.address = address;
-        this.phone = phone;
-        this.email = email;
-        this.type = type;
-        this.status = status;
-        this.account = account;
+    public User() {
     }
 
     public Long getId() {
@@ -133,5 +125,13 @@ public class User {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Set<User> getUser() {
+        return user;
+    }
+
+    public void setUser(Set<User> user) {
+        this.user = user;
     }
 }

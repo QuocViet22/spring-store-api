@@ -1,5 +1,7 @@
 package com.spring.store.api.payload.request;
 
+import com.spring.store.api.models.Product;
+
 import javax.validation.constraints.NotBlank;
 
 public class LoginRequest {

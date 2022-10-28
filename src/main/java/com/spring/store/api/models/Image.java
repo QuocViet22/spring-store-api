@@ -55,4 +55,6 @@ public class Image extends BaseModel{
     public void setProduct(Product product) {
         this.product = product;
     }
+
+
 }
