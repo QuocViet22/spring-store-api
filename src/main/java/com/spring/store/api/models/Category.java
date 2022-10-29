@@ -23,6 +23,7 @@ public class Category extends BaseModel {
 
     @OneToMany(mappedBy = "category")
     private Set<Product> products;
+
     public Category() {
     }
 

@@ -2,9 +2,12 @@ package com.spring.store.api.models;
 
 //import com.sun.deploy.security.ValidationState;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Set;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name = "users")
 public class User {
@@ -40,9 +43,6 @@ public class User {
     @MapsId
     @JoinColumn(name = "account_id")
     private Account account;
-
-    @OneToMany(mappedBy = "user")
-    private Set<User> user;
 
     public User() {
     }
@@ -125,13 +125,5 @@ public class User {
 
     public void setAccount(Account account) {
         this.account = account;
-    }
-
-    public Set<User> getUser() {
-        return user;
-    }
-
-    public void setUser(Set<User> user) {
-        this.user = user;
     }
 }

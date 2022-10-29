@@ -9,9 +9,10 @@ import javax.validation.Valid;
 
 
 import com.spring.store.api.exception.ResourceNotFoundException;
-import com.spring.store.api.models.User;
+import com.spring.store.api.models.*;
 import com.spring.store.api.repository.UserRepository;
 
+import com.spring.store.api.repository.WishListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -27,14 +28,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.store.api.models.Role;
-import com.spring.store.api.models.ERole;
 import com.spring.store.api.payload.request.LoginRequest;
 import com.spring.store.api.payload.request.SignupRequest;
 import com.spring.store.api.payload.response.AccountInfoResponse;
 import com.spring.store.api.payload.response.MessageResponse;
 import com.spring.store.api.security.jwt.JwtUtils;
-import com.spring.store.api.models.Account;
 import com.spring.store.api.repository.RoleRepository;
 import com.spring.store.api.repository.AccountRepository;
 import com.spring.store.api.security.services.AccountDetailsImpl;
@@ -54,6 +52,9 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    WishListRepository wishListRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -107,7 +108,7 @@ public class AuthController {
 //     Create new account's account
         Account account = new Account(signUpRequest.getUsername(),
 //                         signUpRequest.getEmail(),
-        encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -146,6 +147,12 @@ public class AuthController {
         User user = new User();
         user.setAccount(account);
         userRepository.save(user);
+
+        // Create Wish List for User
+        WishList wishList = new WishList();
+        wishList.setUser(user);
+        wishListRepository.save(wishList);
+
         return ResponseEntity.ok(new MessageResponse("Account registered successfully!"));
     }
 

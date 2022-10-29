@@ -30,7 +30,7 @@ public class CategoryController {
     //    get Category by id
     @GetMapping("/category/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<Category> getTutorialById(@PathVariable("id") long id) {
+    public ResponseEntity<Category> getCategoryById(@PathVariable("id") long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + id));
 
@@ -40,7 +40,7 @@ public class CategoryController {
     //    create a New Category
     @PostMapping("/category")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Category> createTutorial(@RequestBody Category categoryRequest) {
+    public ResponseEntity<Category> createCategory(@RequestBody Category categoryRequest) {
         Category category = new Category();
         category.setName(categoryRequest.getName());
         category.setDescription(categoryRequest.getDescription());

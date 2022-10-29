@@ -2,6 +2,7 @@ package com.spring.store.api.models;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Set;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Table(name = "products")
 public class Product extends BaseModel {
@@ -16,16 +18,16 @@ public class Product extends BaseModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
+    @Column(name = "name")
     private String name;
 
-    @Lob
+    @Column(name = "price")
     private String price;
 
-    @Lob
+    @Column(name = "amount")
     private String amount;
 
-    @Lob
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

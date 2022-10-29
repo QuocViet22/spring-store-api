@@ -62,7 +62,6 @@ public class ProductController {
             productRequest.setCategory(category);
             return productRepository.save(productRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
-
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
