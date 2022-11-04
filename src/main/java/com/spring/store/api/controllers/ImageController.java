@@ -2,11 +2,13 @@ package com.spring.store.api.controllers;
 
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.Image;
+import com.spring.store.api.models.Product;
 import com.spring.store.api.payload.response.MessageResponse;
 import com.spring.store.api.repository.ImageRepository;
 import com.spring.store.api.repository.ProductRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +34,8 @@ public class ImageController {
             throw new ResourceNotFoundException("Not found Product with id = " + productId);
         }
 
-        List<Image> images = imageRepository.findByProductId(productId);
+//        List<Image> images = imageRepository.findByProductId(productId);
+        List<Image> images = imageRepository.orderByProductId(productId);
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 

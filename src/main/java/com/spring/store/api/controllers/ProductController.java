@@ -3,6 +3,7 @@ package com.spring.store.api.controllers;
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.Product;
 import com.spring.store.api.payload.response.MessageResponse;
+import com.spring.store.api.payload.response.ProductInforResponse;
 import com.spring.store.api.repository.CategoryRepository;
 import com.spring.store.api.repository.ProductRepository;
 
@@ -28,7 +29,8 @@ public class ProductController {
     @GetMapping("/products")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+//        return productRepository.findAll();
+        return productRepository.findAllProduct();
     }
 
     //    retrieve all Products of a Category

@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -97,5 +98,4 @@ public class Product extends BaseModel {
     public void setImages(Set<Image> images) {
         this.images = images;
     }
-
 }

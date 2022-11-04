@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "images")
-public class Image extends BaseModel{
+public class Image extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

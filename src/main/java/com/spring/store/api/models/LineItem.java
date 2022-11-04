@@ -21,6 +21,9 @@ public class LineItem {
     @Column(name = "total")
     private String total;
 
+    @Column(name = "status")
+    private String status;
+
     @OneToOne(fetch = FetchType.LAZY/*, cascade = CascadeType.ALL*/)
     @MapsId
     @JoinColumn(name = "product_id")
@@ -70,5 +73,13 @@ public class LineItem {
 
     public void setWishList(WishList wishList) {
         this.wishList = wishList;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

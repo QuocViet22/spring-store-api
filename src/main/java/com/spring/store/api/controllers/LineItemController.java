@@ -97,6 +97,7 @@ public class LineItemController {
 
     //    delete LineItem by id
     @DeleteMapping("/lineItem/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> deleteLineItem(@PathVariable("id") long id) {
         lineItemRepository.deleteById(id);
         return ResponseEntity.ok().body(new MessageResponse("Line item has been deleted successfully!"));
@@ -104,6 +105,7 @@ public class LineItemController {
 
     //    delete all LineItems
     @DeleteMapping("/lineItem")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> deleteAllLineItem() {
         lineItemRepository.deleteAll();
         return ResponseEntity.ok().body(new MessageResponse("All line items has been deleted successfully!"));
