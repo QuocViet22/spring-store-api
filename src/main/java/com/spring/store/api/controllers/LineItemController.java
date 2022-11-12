@@ -104,10 +104,18 @@ public class LineItemController {
     }
 
     //    delete all LineItems
-    @DeleteMapping("/lineItem")
+    @DeleteMapping("/lineItems/{wishListId}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<?> deleteAllLineItem() {
-        lineItemRepository.deleteAll();
-        return ResponseEntity.ok().body(new MessageResponse("All line items has been deleted successfully!"));
+    public ResponseEntity<?> deleteAllLineItemOfWishList(@PathVariable("wishListId") long wishListId) {
+//        lineItemRepository.deleteAll();
+//        return ResponseEntity.ok().body(new MessageResponse("All line items has been deleted successfully!"));
+
+        if (!wishListRepository.existsById(wishListId)) {
+            throw new ResourceNotFoundException("Not found Wish List with id = " + wishListId);
+        }
+//        List<LineItem> lineItems = lineItemRepository.findByWishListId(wishListId);
+
+        lineItemRepository.deleteAllByWishListId(wishListId);
+        return ResponseEntity.ok().body(new MessageResponse("All line items have been deleted successfully!"));
     }
 }

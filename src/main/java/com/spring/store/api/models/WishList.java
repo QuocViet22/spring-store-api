@@ -20,7 +20,6 @@ public class WishList {
     private String amountItem;
 
     @OneToOne(fetch = FetchType.LAZY/*, cascade = CascadeType.ALL*/)
-    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 

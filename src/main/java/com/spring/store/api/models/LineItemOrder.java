@@ -2,15 +2,13 @@ package com.spring.store.api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
-@Table(name = "line_items")
-public class LineItem {
+@Table(name = "line_item_orders")
+public class LineItemOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,10 +27,10 @@ public class LineItem {
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "wish_list_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
 //    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private WishList wishList;
+    private Order order;
 
     public Long getId() {
         return id;
@@ -58,6 +56,14 @@ public class LineItem {
         this.total = total;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Product getProduct() {
         return product;
     }
@@ -66,19 +72,11 @@ public class LineItem {
         this.product = product;
     }
 
-    public WishList getWishList() {
-        return wishList;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setWishList(WishList wishList) {
-        this.wishList = wishList;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

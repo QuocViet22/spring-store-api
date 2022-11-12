@@ -6,6 +6,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -21,9 +23,8 @@ public class Order extends BaseModel {
     @JsonIgnore
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY/*, cascade = CascadeType.ALL*/)
-    @JoinColumn(name = "wish_list_id")
-    private WishList wishList;
+    @OneToMany(mappedBy = "order")
+    private Set<LineItemOrder> lineItemOrders = new HashSet<>();
 
     @Column(name = "sale_off")
     private String saleOff;
@@ -52,14 +53,6 @@ public class Order extends BaseModel {
         this.user = user;
     }
 
-    public WishList getWishList() {
-        return wishList;
-    }
-
-    public void setWishList(WishList wishList) {
-        this.wishList = wishList;
-    }
-
     public String getSaleOff() {
         return saleOff;
     }
@@ -82,5 +75,13 @@ public class Order extends BaseModel {
 
     public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Set<LineItemOrder> getLineItemOrders() {
+        return lineItemOrders;
+    }
+
+    public void setLineItemOrders(Set<LineItemOrder> lineItemOrders) {
+        this.lineItemOrders = lineItemOrders;
     }
 }

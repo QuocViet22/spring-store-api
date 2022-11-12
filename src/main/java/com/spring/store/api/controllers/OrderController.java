@@ -1,12 +1,8 @@
 package com.spring.store.api.controllers;
 
 import com.spring.store.api.exception.ResourceNotFoundException;
-import com.spring.store.api.models.Order;
-import com.spring.store.api.models.User;
-import com.spring.store.api.models.WishList;
-import com.spring.store.api.repository.OrderRepository;
-import com.spring.store.api.repository.UserRepository;
-import com.spring.store.api.repository.WishListRepository;
+import com.spring.store.api.models.*;
+import com.spring.store.api.repository.*;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -29,6 +27,12 @@ public class OrderController {
     @Autowired
     private WishListRepository wishListRepository;
 
+    @Autowired
+    private LineItemRepository lineItemRepository;
+
+    @Autowired
+    private LineItemOrderRepository lineItemOrderRepository;
+
     //    create order for user by user_id
     @PostMapping("/orders/{userId}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
@@ -38,8 +42,6 @@ public class OrderController {
         Order order = new Order();
         order.setUser(user);
 
-        WishList wishList = wishListRepository.findByUserId(userId);
-        order.setWishList(wishList);
 
         order.setCreatedBy(orderRequest.getCreatedBy());
         order.setCreatedDate(orderRequest.getCreatedDate());
@@ -51,6 +53,17 @@ public class OrderController {
         order.setSaleOff(orderRequest.getSaleOff());
         order.setTotalPrice(orderRequest.getTotalPrice());
         orderRepository.save(order);
+        WishList wishList = wishListRepository.findByUserId(userId);
+        List<LineItem> lineItems = lineItemRepository.findByWishListId(wishList.getId());
+        for (int i = 0; i < lineItems.size(); i++) {
+            LineItemOrder lineItemOrder = new LineItemOrder();
+            lineItemOrder.setAmount(lineItems.get(i).getAmount());
+            lineItemOrder.setProduct(lineItems.get(i).getProduct());
+            lineItemOrder.setOrder(order);
+            lineItemOrder.setStatus(lineItems.get(i).getStatus());
+            lineItemOrder.setTotal(lineItems.get(i).getTotal());
+            lineItemOrderRepository.save(lineItemOrder);
+        }
 
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }

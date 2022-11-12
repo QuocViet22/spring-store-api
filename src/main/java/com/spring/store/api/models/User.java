@@ -40,7 +40,6 @@ public class User {
     private String status;
 
     @OneToOne(fetch = FetchType.LAZY/*, cascade = CascadeType.ALL*/)
-    @MapsId
     @JoinColumn(name = "account_id")
     private Account account;
 
