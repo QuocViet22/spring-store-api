@@ -54,33 +54,40 @@ public class LineItemController {
     //    create new LineItem of a WishList
     @PostMapping("/wishList/{wishListId}/lineItems/{productId}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<LineItem> createLineItem(@PathVariable(value = "wishListId") Long wishListId,
-                                                   @PathVariable(value = "productId") Long productId,
-                                                   @RequestBody LineItem lineItemRequest) {
+    public ResponseEntity<?> createLineItem(@PathVariable(value = "wishListId") Long wishListId,
+                                            @PathVariable(value = "productId") Long productId,
+                                            @RequestBody LineItem lineItemRequest) {
         WishList wishList = wishListRepository.findById(wishListId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Wish List with id = " + wishListId));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + productId));
-        LineItem lineItem = new LineItem();
-        lineItem.setAmount(lineItemRequest.getAmount());
-        lineItem.setTotal(lineItemRequest.getTotal());
-        lineItem.setProduct(product);
-        lineItem.setWishList(wishList);
-        lineItemRepository.save(lineItem);
 
-        return new ResponseEntity<>(lineItem, HttpStatus.CREATED);
-
-
-//        LineItem lineItem = wishListRepository.findById(wishListId).map(wishList -> {
-//            Product product = productRepository.findById(productId)
-//                    .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + productId));
-//            lineItemRequest.setAmount(lineItemRequest.getAmount());
-//            lineItemRequest.setTotal(lineItemRequest.getTotal());
-//            lineItemRequest.setProduct(product);
-//            return lineItemRepository.save(lineItemRequest);
-//        }).orElseThrow(() -> new ResourceNotFoundException("Not found WishList with id = " + wishListId));
-//        return new ResponseEntity<>(lineItem, HttpStatus.CREATED);
+        if (lineItemRepository.existsByProduct(product)) {
+            LineItem lineItem = lineItemRepository.findByProduct(product);
+            //  Update amount
+            int oldAmount = Integer.parseInt(lineItem.getAmount());
+            int newAmount = Integer.parseInt(lineItemRequest.getAmount());
+            String totalAmount = String.valueOf(oldAmount + newAmount);
+            lineItem.setAmount(totalAmount);
+            //  Update Total
+            int oldTotal = Integer.parseInt(lineItem.getTotal());
+            int newTotal = Integer.parseInt(lineItemRequest.getTotal());
+            String total = String.valueOf(oldTotal + newTotal);
+            lineItem.setTotal(total);
+            //  Update lineItem
+            lineItemRepository.save(lineItem);
+            return new ResponseEntity<>(lineItem, HttpStatus.CREATED);
+        } else {
+            LineItem lineItem = new LineItem();
+            lineItem.setAmount(lineItemRequest.getAmount());
+            lineItem.setTotal(lineItemRequest.getTotal());
+            lineItem.setProduct(product);
+            lineItem.setWishList(wishList);
+            lineItemRepository.save(lineItem);
+            return new ResponseEntity<>(lineItem, HttpStatus.CREATED);
+        }
     }
+
 
     //    update a lineItem by lineItem_id
     @PutMapping("/lineItem/{id}")
@@ -107,14 +114,9 @@ public class LineItemController {
     @DeleteMapping("/lineItems/{wishListId}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> deleteAllLineItemOfWishList(@PathVariable("wishListId") long wishListId) {
-//        lineItemRepository.deleteAll();
-//        return ResponseEntity.ok().body(new MessageResponse("All line items has been deleted successfully!"));
-
         if (!wishListRepository.existsById(wishListId)) {
             throw new ResourceNotFoundException("Not found Wish List with id = " + wishListId);
         }
-//        List<LineItem> lineItems = lineItemRepository.findByWishListId(wishListId);
-
         lineItemRepository.deleteAllByWishListId(wishListId);
         return ResponseEntity.ok().body(new MessageResponse("All line items have been deleted successfully!"));
     }

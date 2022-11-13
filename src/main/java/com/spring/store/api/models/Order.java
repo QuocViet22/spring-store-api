@@ -35,6 +35,15 @@ public class Order extends BaseModel {
     @Column(name = "total_price")
     private String totalPrice;
 
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "name")
+    private String name;
+
     @Override
     public Long getId() {
         return id;
@@ -83,5 +92,29 @@ public class Order extends BaseModel {
 
     public void setLineItemOrders(Set<LineItemOrder> lineItemOrders) {
         this.lineItemOrders = lineItemOrders;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

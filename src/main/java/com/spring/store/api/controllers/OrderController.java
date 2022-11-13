@@ -42,7 +42,6 @@ public class OrderController {
         Order order = new Order();
         order.setUser(user);
 
-
         order.setCreatedBy(orderRequest.getCreatedBy());
         order.setCreatedDate(orderRequest.getCreatedDate());
         order.setModifiedBy(orderRequest.getModifiedBy());
@@ -52,7 +51,11 @@ public class OrderController {
         order.setVat(orderRequest.getVat());
         order.setSaleOff(orderRequest.getSaleOff());
         order.setTotalPrice(orderRequest.getTotalPrice());
-        orderRepository.save(order);
+
+        order.setAddress(orderRequest.getAddress());
+        order.setName(orderRequest.getName());
+        order.setPhoneNumber(orderRequest.getPhoneNumber());
+
         WishList wishList = wishListRepository.findByUserId(userId);
         List<LineItem> lineItems = lineItemRepository.findByWishListId(wishList.getId());
         for (int i = 0; i < lineItems.size(); i++) {
@@ -65,6 +68,7 @@ public class OrderController {
             lineItemOrderRepository.save(lineItemOrder);
         }
 
+        orderRepository.save(order);
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
 
@@ -78,6 +82,15 @@ public class OrderController {
 
         List<Order> orders = orderRepository.findByUserId(userId);
         return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    //    retrieve order by order_id
+    @GetMapping("/orders/{orderId}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<Order> getOrderByOrderId(@PathVariable(value = "orderId") Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Order with id = " + orderId));
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     //    retrieve list of all order
