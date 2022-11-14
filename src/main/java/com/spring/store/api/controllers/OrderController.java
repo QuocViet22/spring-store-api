@@ -55,6 +55,7 @@ public class OrderController {
         order.setAddress(orderRequest.getAddress());
         order.setName(orderRequest.getName());
         order.setPhoneNumber(orderRequest.getPhoneNumber());
+        orderRepository.save(order);
 
         WishList wishList = wishListRepository.findByUserId(userId);
         List<LineItem> lineItems = lineItemRepository.findByWishListId(wishList.getId());
@@ -68,7 +69,7 @@ public class OrderController {
             lineItemOrderRepository.save(lineItemOrder);
         }
 
-        orderRepository.save(order);
+//        orderRepository.save(order);
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
 
@@ -85,7 +86,7 @@ public class OrderController {
     }
 
     //    retrieve order by order_id
-    @GetMapping("/orders/{orderId}")
+    @GetMapping("/order/{orderId}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Order> getOrderByOrderId(@PathVariable(value = "orderId") Long orderId) {
         Order order = orderRepository.findById(orderId)
