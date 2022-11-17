@@ -62,8 +62,8 @@ public class LineItemController {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + productId));
 
-        if (lineItemRepository.existsByProduct(product)) {
-            LineItem lineItem = lineItemRepository.findByProduct(product);
+        if (lineItemRepository.existsByProductAndWishListId(product, wishListId)) {
+            LineItem lineItem = lineItemRepository.findByProductAndWishListId(product, wishListId);
             //  Update amount
             int oldAmount = Integer.parseInt(lineItem.getAmount());
             int newAmount = Integer.parseInt(lineItemRequest.getAmount());

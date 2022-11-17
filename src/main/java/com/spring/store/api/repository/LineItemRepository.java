@@ -12,10 +12,12 @@ import java.util.Optional;
 public interface LineItemRepository extends JpaRepository<LineItem, Long> {
     List<LineItem> findByWishListId(Long wishListId);
 
-    boolean existsByProduct(Product product);
+    boolean existsByProductAndWishListId(Product product, Long wishListId);
 
-    LineItem findByProduct(Product product);
+    LineItem findByProductAndWishListId(Product product, Long wishListId);
 
     @Transactional
     void deleteAllByWishListId(Long wishListId);
+
+
 }
