@@ -12,6 +12,8 @@ public class UpdateAccountRequest {
     private String password;
     private String status;
     private Set<String> role;
+    private String setModifiedBy;
+    private String getSetModifiedDate;
 
     public String getNewPassword() {
         return newPassword;
@@ -51,6 +53,22 @@ public class UpdateAccountRequest {
 
     public void setRole(Set<String> role) {
         this.role = role;
+    }
+
+    public String getSetModifiedBy() {
+        return setModifiedBy;
+    }
+
+    public void setSetModifiedBy(String setModifiedBy) {
+        this.setModifiedBy = setModifiedBy;
+    }
+
+    public String getGetSetModifiedDate() {
+        return getSetModifiedDate;
+    }
+
+    public void setGetSetModifiedDate(String getSetModifiedDate) {
+        this.getSetModifiedDate = getSetModifiedDate;
     }
 }
 

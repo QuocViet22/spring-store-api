@@ -139,11 +139,13 @@ public class AuthController {
         }
 
         account.setRoles(roles);
+        account.setStatus("1");
         accountRepository.save(account);
 
         // Create User
         User user = new User();
         user.setAccount(account);
+        user.setStatus("1");
         userRepository.save(user);
 
         // Create Wish List for User

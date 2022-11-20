@@ -65,7 +65,7 @@ public class CategoryController {
         category.setStatus(categoryRequest.getStatus());
         category.setCreatedBy(categoryRequest.getCreatedBy());
         category.setCreatedDate(categoryRequest.getCreatedDate());
-        category.setModifiedBy(categoryRequest.getModifiedDate());
+        category.setModifiedBy(categoryRequest.getModifiedBy());
         category.setModifiedDate(categoryRequest.getModifiedDate());
         categoryRepository.save(category);
         return ResponseEntity.ok().body(new MessageResponse("Category has been updated successfully!"));

@@ -87,6 +87,8 @@ public class AccountController {
             account.setPassword(account.getPassword());
         }
         account.setStatus(updateAccountRequest.getStatus());
+        account.setModifiedBy(updateAccountRequest.getSetModifiedBy());
+        account.setModifiedDate(updateAccountRequest.getGetSetModifiedDate());
 //        account.setRoles(updateAccountRequest.getRole());
         // update Role for user account
         Set<String> strRoles = updateAccountRequest.getRole();
@@ -118,6 +120,7 @@ public class AccountController {
                 }
             });
         }
+
         account.setRoles(roles);
         accountRepository.save(account);
         return ResponseEntity.ok().body(new MessageResponse("Account has been updated successfully!"));
