@@ -113,7 +113,7 @@ public class OrderController {
 
     //    update order for manager by order_id to confirm
     @PutMapping("/orders/{orderId}")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<?> updateOrderByUserId(@PathVariable(value = "orderId") Long orderId, @RequestBody Order orderRequest) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Order with id = " + orderId));
