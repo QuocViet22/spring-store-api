@@ -63,12 +63,15 @@ public class LineItemController {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + productId));
         int amountOfRequest = Integer.valueOf(lineItemRequest.getAmount());
         if (Integer.valueOf(product.getAmount()) < amountOfRequest) {
-            throw new ResourceNotFoundException("Product's amount is " + Integer.valueOf(product.getAmount()) + " .Please choose again!");
+            throw new ResourceNotFoundException(product.getName() + "'s amount is " + Integer.valueOf(product.getAmount()) + " .Please choose again!");
         }
         if (lineItemRepository.existsByProductAndWishListId(product, wishListId)) {
             LineItem lineItem = lineItemRepository.findByProductAndWishListId(product, wishListId);
             //  Update amount
             int oldAmount = Integer.parseInt(lineItem.getAmount());
+            if (Integer.valueOf(product.getAmount()) < amountOfRequest + oldAmount) {
+                throw new ResourceNotFoundException(product.getName() + "'s amount is " + Integer.valueOf(product.getAmount()) + " .Please choose again!");
+            }
             int newAmount = Integer.parseInt(lineItemRequest.getAmount());
             String totalAmount = String.valueOf(oldAmount + newAmount);
             lineItem.setAmount(totalAmount);
