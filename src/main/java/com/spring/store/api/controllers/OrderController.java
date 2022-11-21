@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -34,6 +35,7 @@ public class OrderController {
     private LineItemOrderRepository lineItemOrderRepository;
 
     //    create order for user by user_id
+    @Transactional
     @PostMapping("/orders/{userId}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Order> createOrderByUserId(@PathVariable(value = "userId") Long userId, @RequestBody Order orderRequest) {
@@ -41,17 +43,14 @@ public class OrderController {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found User with id = " + userId));
         Order order = new Order();
         order.setUser(user);
-
         order.setCreatedBy(orderRequest.getCreatedBy());
         order.setCreatedDate(orderRequest.getCreatedDate());
         order.setModifiedBy(orderRequest.getModifiedBy());
         order.setModifiedDate(orderRequest.getModifiedDate());
         order.setStatus(orderRequest.getStatus());
-
         order.setVat(orderRequest.getVat());
         order.setSaleOff(orderRequest.getSaleOff());
         order.setTotalPrice(orderRequest.getTotalPrice());
-
         order.setAddress(orderRequest.getAddress());
         order.setName(orderRequest.getName());
         order.setPhoneNumber(orderRequest.getPhoneNumber());
@@ -61,15 +60,25 @@ public class OrderController {
         List<LineItem> lineItems = lineItemRepository.findByWishListId(wishList.getId());
         for (int i = 0; i < lineItems.size(); i++) {
             LineItemOrder lineItemOrder = new LineItemOrder();
+            // Minus amount of product
+            int amountOfLineItem = Integer.parseInt(lineItems.get(i).getAmount());
+            int amountOfProduct = Integer.parseInt(lineItems.get(i).getProduct().getAmount());
+            if (amountOfProduct < amountOfLineItem) {
+                throw new ResourceNotFoundException("Product's amount is " + Integer.valueOf(amountOfProduct) + " .Please choose again!");
+            }
+            String newAmountOfProduct = String.valueOf(amountOfProduct - amountOfLineItem);
+            lineItems.get(i).getProduct().setAmount(newAmountOfProduct);
+
             lineItemOrder.setAmount(lineItems.get(i).getAmount());
             lineItemOrder.setProduct(lineItems.get(i).getProduct());
             lineItemOrder.setOrder(order);
             lineItemOrder.setStatus(lineItems.get(i).getStatus());
+//            lineItems.get(i).setStatus("1");
             lineItemOrder.setTotal(lineItems.get(i).getTotal());
             lineItemOrderRepository.save(lineItemOrder);
         }
-
-//        orderRepository.save(order);
+        orderRepository.save(order);
+        lineItemRepository.deleteAllByWishListId(wishList.getId());
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
 
@@ -96,7 +105,7 @@ public class OrderController {
 
     //    retrieve list of all order
     @GetMapping("/orders")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Order>> getListOrder() {
         List<Order> orders = orderRepository.findAll();
         return new ResponseEntity<>(orders, HttpStatus.OK);

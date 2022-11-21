@@ -19,5 +19,6 @@ public interface LineItemRepository extends JpaRepository<LineItem, Long> {
     @Transactional
     void deleteAllByWishListId(Long wishListId);
 
-
+    @Transactional
+    void deleteAllByStatus(String status);
 }

@@ -61,7 +61,10 @@ public class LineItemController {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Wish List with id = " + wishListId));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + productId));
-
+        int amountOfRequest = Integer.valueOf(lineItemRequest.getAmount());
+        if (Integer.valueOf(product.getAmount()) < amountOfRequest) {
+            throw new ResourceNotFoundException("Product's amount is " + Integer.valueOf(product.getAmount()) + " .Please choose again!");
+        }
         if (lineItemRepository.existsByProductAndWishListId(product, wishListId)) {
             LineItem lineItem = lineItemRepository.findByProductAndWishListId(product, wishListId);
             //  Update amount
@@ -71,7 +74,9 @@ public class LineItemController {
             lineItem.setAmount(totalAmount);
             //  Update Total
             int oldTotal = Integer.parseInt(lineItem.getTotal());
-            int newTotal = Integer.parseInt(lineItemRequest.getTotal());
+            int totalOfProduct = Integer.valueOf(product.getPrice());
+            int amountOfLineItem = Integer.valueOf(lineItemRequest.getAmount());
+            int newTotal = totalOfProduct * amountOfLineItem;
             String total = String.valueOf(oldTotal + newTotal);
             lineItem.setTotal(total);
             //  Update lineItem
@@ -80,9 +85,13 @@ public class LineItemController {
         } else {
             LineItem lineItem = new LineItem();
             lineItem.setAmount(lineItemRequest.getAmount());
-            lineItem.setTotal(lineItemRequest.getTotal());
             lineItem.setProduct(product);
             lineItem.setWishList(wishList);
+            // Calculate total of LineItem
+            int totalOfProduct = Integer.valueOf(product.getPrice());
+            int amountOfLineItem = Integer.valueOf(lineItemRequest.getAmount());
+            int total = totalOfProduct * amountOfLineItem;
+            lineItem.setTotal(String.valueOf(total));
             lineItemRepository.save(lineItem);
             return new ResponseEntity<>(lineItem, HttpStatus.CREATED);
         }
@@ -95,11 +104,24 @@ public class LineItemController {
     public ResponseEntity<?> updateLineItem(@PathVariable("id") long id, @RequestBody LineItem lineItemRequest) {
         LineItem lineItem = lineItemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Line item Id " + id + "not found"));
-
+        int priceOfProduct = Integer.valueOf(lineItem.getProduct().getPrice());
+        int amountOfLineItem = Integer.valueOf(lineItemRequest.getAmount());
+        int total = priceOfProduct * amountOfLineItem;
         lineItem.setAmount(lineItemRequest.getAmount());
-        lineItem.setTotal(lineItem.getTotal());
+        lineItem.setTotal(String.valueOf(total));
         lineItemRepository.save(lineItem);
         return ResponseEntity.ok().body(new MessageResponse("Line item has been updated successfully!"));
+    }
+
+    //    update status of LineItem
+    @PutMapping("/lineItem/status/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<?> updateStatusLineItem(@PathVariable("id") long id, @RequestBody LineItem lineItemRequest) {
+        LineItem lineItem = lineItemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Line item Id " + id + "not found"));
+        lineItem.setStatus("1");
+        lineItemRepository.save(lineItem);
+        return ResponseEntity.ok().body(new MessageResponse("Line item status has been updated successfully!"));
     }
 
     //    delete LineItem by id
