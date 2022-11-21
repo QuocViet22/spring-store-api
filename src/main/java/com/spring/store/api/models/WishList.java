@@ -1,6 +1,8 @@
 package com.spring.store.api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -10,6 +12,8 @@ import java.util.Set;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
+@Getter
+@Setter
 @Table(name = "wish_lists")
 public class WishList {
     @Id
@@ -25,36 +29,4 @@ public class WishList {
 
     @OneToMany(mappedBy = "wishList")
     private Set<LineItem> lineItems;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getAmountItem() {
-        return amountItem;
-    }
-
-    public void setAmountItem(String amountItem) {
-        this.amountItem = amountItem;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Set<LineItem> getLineItems() {
-        return lineItems;
-    }
-
-    public void setLineItems(Set<LineItem> lineItems) {
-        this.lineItems = lineItems;
-    }
 }
