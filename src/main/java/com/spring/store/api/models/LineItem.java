@@ -22,6 +22,9 @@ public class LineItem {
     @Column(name = "amount")
     private String amount;
 
+    @Column(name = "size")
+    private String size;
+
     @Column(name = "total")
     private String total;
 

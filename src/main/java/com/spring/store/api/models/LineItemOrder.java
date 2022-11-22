@@ -20,6 +20,9 @@ public class LineItemOrder {
     @Column(name = "amount")
     private String amount;
 
+    @Column(name = "size")
+    private String size;
+
     @Column(name = "total")
     private String total;
 
@@ -32,7 +35,6 @@ public class LineItemOrder {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Order order;
 }

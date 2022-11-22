@@ -43,4 +43,7 @@ public class Product extends BaseModel {
 
     @OneToMany(mappedBy = "product")
     private Set<Image> images;
+
+    @OneToMany
+    private Set<Size> sizes;
 }

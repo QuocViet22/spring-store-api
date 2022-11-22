@@ -70,6 +70,7 @@ public class OrderController {
             lineItems.get(i).getProduct().setAmount(newAmountOfProduct);
 
             lineItemOrder.setAmount(lineItems.get(i).getAmount());
+            lineItemOrder.setSize(lineItems.get(i).getSize());
             lineItemOrder.setProduct(lineItems.get(i).getProduct());
             lineItemOrder.setOrder(order);
             lineItemOrder.setStatus(lineItems.get(i).getStatus());
