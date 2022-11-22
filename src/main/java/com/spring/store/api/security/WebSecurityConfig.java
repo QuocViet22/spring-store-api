@@ -87,7 +87,9 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
             "/api/auth/**",
             "/api/test/**",
             "/swagger-ui.html",
-            "/api/"
+            "/api/products/",
+            "/api/product/",
+            "api/category/"
     };
 
     @Bean
