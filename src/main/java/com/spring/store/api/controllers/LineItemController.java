@@ -107,6 +107,10 @@ public class LineItemController {
     public ResponseEntity<?> updateLineItem(@PathVariable("id") long id, @RequestBody LineItem lineItemRequest) {
         LineItem lineItem = lineItemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Line item Id " + id + "not found"));
+        //        Update amount
+        if (Integer.valueOf(lineItem.getProduct().getAmount()) < Integer.valueOf(lineItemRequest.getAmount())) {
+            throw new ResourceNotFoundException(lineItem.getProduct().getName() + "'s amount is " + Integer.valueOf(lineItem.getProduct().getAmount()) + " .Please choose again!");
+        }
         int priceOfProduct = Integer.valueOf(lineItem.getProduct().getPrice());
         int amountOfLineItem = Integer.valueOf(lineItemRequest.getAmount());
         int total = priceOfProduct * amountOfLineItem;
