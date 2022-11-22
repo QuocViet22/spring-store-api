@@ -34,8 +34,8 @@ public class ProductController {
     }
 
     //    retrieve all Products of a Category
-//    @GetMapping("/category/{categoryId}/products")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+   @GetMapping("/category/{categoryId}/products")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Product>> getAllProductsByCategoryId(@PathVariable(value = "categoryId") Long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new ResourceNotFoundException("Not found Category with id = " + categoryId);

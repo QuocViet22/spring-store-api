@@ -22,14 +22,14 @@ public class CategoryController {
 
     //    get all categories
     @GetMapping("/category")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public List<Category> getAllCategory() {
         return categoryRepository.findAll();
     }
 
     //    get Category by id
     @GetMapping("/category/{id}")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Category> getCategoryById(@PathVariable("id") long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + id));
