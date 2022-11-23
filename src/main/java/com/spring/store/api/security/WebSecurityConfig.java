@@ -39,11 +39,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
         return new AuthTokenFilter();
     }
 
-//  @Override
-//  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-//    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//  }
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -53,12 +48,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 
         return authProvider;
     }
-
-//  @Bean
-//  @Override
-//  public AuthenticationManager authenticationManagerBean() throws Exception {
-//    return super.authenticationManagerBean();
-//  }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -87,9 +76,10 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
             "/api/auth/**",
             "/api/test/**",
             "/swagger-ui.html",
-            "/api/products/",
-            "/api/product/",
-            "api/category/"
+            "/api/products",
+            "/api/product/**",
+            "api/category/**",
+            "api/**"
     };
 
     @Bean
@@ -101,7 +91,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
 //                .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();
-
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 

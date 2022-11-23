@@ -27,9 +27,9 @@ public class ProductController {
 
     //    get all products
     @GetMapping("/products")
-//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    //  @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public List<Product> getAllProducts() {
-//        return productRepository.findAll();
+    //        return productRepository.findAll();
         return productRepository.findAllProduct();
     }
 
@@ -40,18 +40,16 @@ public class ProductController {
         if (!categoryRepository.existsById(categoryId)) {
             throw new ResourceNotFoundException("Not found Category with id = " + categoryId);
         }
-
         List<Product> products = productRepository.findByCategoryId(categoryId);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     //    retrieve a Product by product_id
     @GetMapping("/product/{id}")
-//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    //    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Product> getProductsByCategoryId(@PathVariable(value = "id") Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + id));
-
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 

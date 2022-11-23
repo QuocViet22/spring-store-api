@@ -1,5 +1,6 @@
 package com.spring.store.api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
+@Table(name = "Sizes")
 public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -44,6 +44,9 @@ public class Product extends BaseModel {
     @OneToMany(mappedBy = "product")
     private Set<Image> images;
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "product_sizes",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "size_id"))
     private Set<Size> sizes;
 }
