@@ -21,6 +21,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //    @Query(value = query, nativeQuery = true)
     @Query(value = "SELECT p.* FROM Products p INNER JOIN Images i ON p.id = i.product_id GROUP BY p.id", nativeQuery = true)
     List<Product> findAllProduct();
-//    @Transactional
-//    void deleteByTutorialId(long tutorialId);
+
+    @Query(value = "SELECT p.* FROM Products p " +
+            "INNER JOIN Product_sizes s ON p.id = s.product_id " +
+            "WHERE s.size_id=?1", nativeQuery = true)
+    List<Product> findProductBySize(Long sizeId);
 }

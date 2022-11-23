@@ -16,5 +16,5 @@ public class ProductRequest {
     private String description;
     private Category category;
     private Set<Image> images;
-    private Set<Long> sizes;
+    private Set<String> sizes;
 }
