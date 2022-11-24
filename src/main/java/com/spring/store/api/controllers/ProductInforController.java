@@ -44,7 +44,8 @@ public class ProductInforController {
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<ProductInfor> createProductInfor(@PathVariable(value = "productId") Long productId,
                                                            @RequestBody ProductInfor productInforRequest) {
-        if (productInforRepository.existsBySizeAndProductId(productInforRequest.getSize(), productInforRequest.getProduct().getId())) {
+//        Long productId = Long.valueOf(productInforRequest.getProduct().getId());
+        if (productInforRepository.existsBySizeAndProductId(productInforRequest.getSize(), productId)) {
             throw new ResourceNotFoundException("Already existed size id: " + productInforRequest.getSize());
         }
         ProductInfor productInfor = productRepository.findById(productId).map(product -> {
