@@ -65,7 +65,7 @@ public class LineItemController {
         if (Integer.valueOf(product.getAmount()) < amountOfRequest) {
             throw new ResourceNotFoundException(product.getName() + "'s amount is " + Integer.valueOf(product.getAmount()) + " .Please choose again!");
         }
-        if (lineItemRepository.existsByProductAndWishListId(product, wishListId)) {
+        if (lineItemRepository.existsByProductAndWishListIdAndSize(product, wishListId, lineItemRequest.getSize())) {
             LineItem lineItem = lineItemRepository.findByProductAndWishListId(product, wishListId);
             //  Update amount
             int oldAmount = Integer.parseInt(lineItem.getAmount());
@@ -88,6 +88,7 @@ public class LineItemController {
         } else {
             LineItem lineItem = new LineItem();
             lineItem.setAmount(lineItemRequest.getAmount());
+            lineItem.setSize(lineItemRequest.getSize());
             lineItem.setProduct(product);
             lineItem.setWishList(wishList);
             // Calculate total of LineItem

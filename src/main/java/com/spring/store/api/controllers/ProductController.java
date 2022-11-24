@@ -85,7 +85,6 @@ public class ProductController {
                 .orElseThrow(() -> new ResourceNotFoundException("Category id " + categoryId + " not found!"));
         Product product = new Product();
         product.setCategory(category);
-
         Set<String> strSizes = productRequest.getSizes();
         Set<Size> sizes = new HashSet<>();
         strSizes.forEach(size -> {
