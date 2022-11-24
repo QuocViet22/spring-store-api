@@ -63,6 +63,8 @@ public class ProductInforController {
     public ResponseEntity<?> updateProductInfor(@PathVariable("id") long id, @RequestBody ProductInfor productInforRequest) {
         ProductInfor productInfor = productInforRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product infor Id " + id + "not found"));
+        productInfor.setAmount(productInforRequest.getAmount());
+        productInfor.setSize(productInforRequest.getSize());
         productInforRepository.save(productInfor);
         return ResponseEntity.ok().body(new MessageResponse("Information of product has been updated successfully!"));
     }
