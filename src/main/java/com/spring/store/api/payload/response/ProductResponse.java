@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class ProductInforResponse {
+public class ProductResponse {
     private Long id;
     private String createdBy;
     private String createdDate;
@@ -23,6 +23,6 @@ public class ProductInforResponse {
     private Set<Image> images;
     private Set<Size> sizes;
 
-    public ProductInforResponse() {
+    public ProductResponse() {
     }
 }

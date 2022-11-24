@@ -3,11 +3,14 @@ package com.spring.store.api.controllers;
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.LineItem;
 import com.spring.store.api.models.Product;
+import com.spring.store.api.models.ProductInfor;
 import com.spring.store.api.models.WishList;
 import com.spring.store.api.payload.response.MessageResponse;
 import com.spring.store.api.repository.LineItemRepository;
+import com.spring.store.api.repository.ProductInforRepository;
 import com.spring.store.api.repository.ProductRepository;
 import com.spring.store.api.repository.WishListRepository;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +31,9 @@ public class LineItemController {
 
     @Autowired
     private LineItemRepository lineItemRepository;
+
+    @Autowired
+    private ProductInforRepository productInforRepository;
 
     //    retrieve all LineItems of a WishList
     @GetMapping("/wishList/{wishListId}/lineItems")
@@ -61,16 +67,18 @@ public class LineItemController {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Wish List with id = " + wishListId));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + productId));
+        ProductInfor productInfor = productInforRepository.findBySizeAndProductId(lineItemRequest.getSize(), productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product id = " + productId + " Size id = " + lineItemRequest.getSize()));
         int amountOfRequest = Integer.valueOf(lineItemRequest.getAmount());
-        if (Integer.valueOf(product.getAmount()) < amountOfRequest) {
-            throw new ResourceNotFoundException(product.getName() + "'s amount is " + Integer.valueOf(product.getAmount()) + " .Please choose again!");
+        if (Integer.valueOf(productInfor.getAmount()) < amountOfRequest) {
+            throw new ResourceNotFoundException(product.getName() + "'s amount has size is " + lineItemRequest.getSize() + " is " + Integer.valueOf(productInfor.getAmount()) + " .Please choose again!");
         }
         if (lineItemRepository.existsByProductAndWishListIdAndSize(product, wishListId, lineItemRequest.getSize())) {
             LineItem lineItem = lineItemRepository.findByProductAndWishListId(product, wishListId);
             //  Update amount
             int oldAmount = Integer.parseInt(lineItem.getAmount());
-            if (Integer.valueOf(product.getAmount()) < amountOfRequest + oldAmount) {
-                throw new ResourceNotFoundException(product.getName() + "'s amount is " + Integer.valueOf(product.getAmount()) + " .Please choose again!");
+            if (Integer.valueOf(productInfor.getAmount()) < amountOfRequest + oldAmount) {
+                throw new ResourceNotFoundException(product.getName() + "'s amount is " + Integer.valueOf(productInfor.getAmount()) + " .Please choose again!");
             }
             int newAmount = Integer.parseInt(lineItemRequest.getAmount());
             String totalAmount = String.valueOf(oldAmount + newAmount);
@@ -109,8 +117,11 @@ public class LineItemController {
         LineItem lineItem = lineItemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Line item Id " + id + "not found"));
         //        Update amount
-        if (Integer.valueOf(lineItem.getProduct().getAmount()) < Integer.valueOf(lineItemRequest.getAmount())) {
-            throw new ResourceNotFoundException(lineItem.getProduct().getName() + "'s amount is " + Integer.valueOf(lineItem.getProduct().getAmount()) + " .Please choose again!");
+        Long productId = Long.valueOf(lineItem.getSize());
+        ProductInfor productInfor = productInforRepository.findBySizeAndProductId(lineItem.getSize(), productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product id = " + productId + " Size id = " + lineItemRequest.getSize()));
+        if (Integer.valueOf(productInfor.getAmount()) < Integer.valueOf(lineItemRequest.getAmount())) {
+            throw new ResourceNotFoundException(lineItem.getProduct().getName() + "'s amount is " + Integer.valueOf(productInfor.getAmount()) + " .Please choose again!");
         }
         int priceOfProduct = Integer.valueOf(lineItem.getProduct().getPrice());
         int amountOfLineItem = Integer.valueOf(lineItemRequest.getAmount());

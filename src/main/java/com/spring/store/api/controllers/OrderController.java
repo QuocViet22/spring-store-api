@@ -34,6 +34,9 @@ public class OrderController {
     @Autowired
     private LineItemOrderRepository lineItemOrderRepository;
 
+    @Autowired
+    private ProductInforRepository productInforRepository;
+
     //    create order for user by user_id
     @Transactional
     @PostMapping("/orders/{userId}")
@@ -62,12 +65,15 @@ public class OrderController {
             LineItemOrder lineItemOrder = new LineItemOrder();
             // Minus amount of product
             int amountOfLineItem = Integer.parseInt(lineItems.get(i).getAmount());
-            int amountOfProduct = Integer.parseInt(lineItems.get(i).getProduct().getAmount());
+            Long productId = Long.valueOf(lineItems.get(i).getSize());
+            ProductInfor productInfor = productInforRepository.findBySizeAndProductId(lineItems.get(i).getSize(), productId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product!"));
+            int amountOfProduct = Integer.parseInt(productInfor.getAmount());
             if (amountOfProduct < amountOfLineItem) {
                 throw new ResourceNotFoundException("Product's amount is " + Integer.valueOf(amountOfProduct) + " .Please choose again!");
             }
             String newAmountOfProduct = String.valueOf(amountOfProduct - amountOfLineItem);
-            lineItems.get(i).getProduct().setAmount(newAmountOfProduct);
+            productInfor.setAmount(newAmountOfProduct);
 
             lineItemOrder.setAmount(lineItems.get(i).getAmount());
             lineItemOrder.setSize(lineItems.get(i).getSize());

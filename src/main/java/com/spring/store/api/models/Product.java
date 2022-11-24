@@ -29,8 +29,8 @@ public class Product extends BaseModel {
     @Column(name = "price")
     private String price;
 
-    @Column(name = "amount")
-    private String amount;
+//    @Column(name = "amount")
+//    private String amount;
 
     @Column(name = "description")
     private String description;
@@ -44,9 +44,6 @@ public class Product extends BaseModel {
     @OneToMany(mappedBy = "product")
     private Set<Image> images;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "product_sizes",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "size_id"))
-    private Set<Size> sizes;
+    @OneToMany(mappedBy = "product")
+    private Set<ProductInfor> productInfors;
 }
