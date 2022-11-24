@@ -117,7 +117,7 @@ public class LineItemController {
         LineItem lineItem = lineItemRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Line item Id " + id + "not found"));
         //        Update amount
-        Long productId = Long.valueOf(lineItem.getSize());
+        Long productId = Long.valueOf(lineItem.getProduct().getId());
         ProductInfor productInfor = productInforRepository.findBySizeAndProductId(lineItem.getSize(), productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product id = " + productId + " Size id = " + lineItemRequest.getSize()));
         if (Integer.valueOf(productInfor.getAmount()) < Integer.valueOf(lineItemRequest.getAmount())) {

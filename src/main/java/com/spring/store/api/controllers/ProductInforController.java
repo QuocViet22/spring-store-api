@@ -68,4 +68,11 @@ public class ProductInforController {
         productInforRepository.save(productInfor);
         return ResponseEntity.ok().body(new MessageResponse("Information of product has been updated successfully!"));
     }
+
+    //    delete User by id
+    @DeleteMapping("/productInfor/{id}")
+    public ResponseEntity<HttpStatus> deleteDetails(@PathVariable("id") long id) {
+        productInforRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
