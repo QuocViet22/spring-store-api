@@ -6,10 +6,7 @@ import com.spring.store.api.models.Product;
 import com.spring.store.api.models.ProductInfor;
 import com.spring.store.api.models.WishList;
 import com.spring.store.api.payload.response.MessageResponse;
-import com.spring.store.api.repository.LineItemRepository;
-import com.spring.store.api.repository.ProductInforRepository;
-import com.spring.store.api.repository.ProductRepository;
-import com.spring.store.api.repository.WishListRepository;
+import com.spring.store.api.repository.*;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +31,9 @@ public class LineItemController {
 
     @Autowired
     private ProductInforRepository productInforRepository;
+
+    @Autowired
+    private SizeRepository sizeRepository;
 
     //    retrieve all LineItems of a WishList
     @GetMapping("/wishList/{wishListId}/lineItems")
@@ -96,7 +96,7 @@ public class LineItemController {
         } else {
             LineItem lineItem = new LineItem();
             lineItem.setAmount(lineItemRequest.getAmount());
-            lineItem.setSize(lineItemRequest.getSize());
+            lineItem.setSize(lineItemRequest.getSize().toString());
             lineItem.setProduct(product);
             lineItem.setWishList(wishList);
             // Calculate total of LineItem
@@ -128,6 +128,7 @@ public class LineItemController {
         int total = priceOfProduct * amountOfLineItem;
         lineItem.setAmount(lineItemRequest.getAmount());
         lineItem.setTotal(String.valueOf(total));
+        lineItem.setSize(lineItemRequest.getSize());
         lineItemRepository.save(lineItem);
         return ResponseEntity.ok().body(new MessageResponse("Line item has been updated successfully!"));
     }
