@@ -65,7 +65,7 @@ public class OrderController {
             LineItemOrder lineItemOrder = new LineItemOrder();
             // Minus amount of product
             int amountOfLineItem = Integer.parseInt(lineItems.get(i).getAmount());
-            Long productId = Long.valueOf(lineItems.get(i).getSize());
+            Long productId = Long.valueOf(lineItems.get(i).getProduct().getId());
             ProductInfor productInfor = productInforRepository.findBySizeAndProductId(lineItems.get(i).getSize(), productId)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product!"));
             int amountOfProduct = Integer.parseInt(productInfor.getAmount());
