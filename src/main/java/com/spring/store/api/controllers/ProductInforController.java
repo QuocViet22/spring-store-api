@@ -28,12 +28,23 @@ public class ProductInforController {
     @Autowired
     private SizeRepository sizeRepository;
 
+
+    //    retrieve a ProductInfor by id
+    @GetMapping("/productInfor/{id}")
+//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<ProductInfor> getProductIdById(@PathVariable(value = "id") Long id) {
+        ProductInfor productInfor = productInforRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found ProductInfor with id = " + id));
+
+        return new ResponseEntity<>(productInfor, HttpStatus.OK);
+    }
+
     //    create new Infor for a Product
     @PostMapping("/product/{productId}/productInfor")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<ProductInfor> createProductInfor(@PathVariable(value = "productId") Long productId,
                                                            @RequestBody ProductInfor productInforRequest) {
-        if (productInforRepository.existsBySize(productInforRequest.getSize())) {
+        if (productInforRepository.existsBySizeAndProductId(productInforRequest.getSize(), productInforRequest.getProduct().getId())) {
             throw new ResourceNotFoundException("Already existed size id: " + productInforRequest.getSize());
         }
         ProductInfor productInfor = productRepository.findById(productId).map(product -> {

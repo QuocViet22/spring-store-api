@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ProductInforRepository extends JpaRepository<ProductInfor, Long> {
     List<ProductInfor> findByProductId(Long productId);
 
-    Boolean existsBySize(String size);
+    Boolean existsBySizeAndProductId(String size, Long productId);
 
     Optional<ProductInfor> findBySizeAndProductId(String size, Long productId);
 
