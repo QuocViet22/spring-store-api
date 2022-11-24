@@ -1,6 +1,7 @@
 package com.spring.store.api.payload.response;
 
 import com.spring.store.api.models.Image;
+import com.spring.store.api.models.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,7 @@ public class ProductInforResponse {
     private String amount;
     private String description;
     private Set<Image> images;
+    private Set<Size> sizes;
 
     public ProductInforResponse() {
     }

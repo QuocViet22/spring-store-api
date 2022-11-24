@@ -1,15 +1,9 @@
 package com.spring.store.api.controllers;
 
-import com.spring.store.api.exception.ResourceNotFoundException;
-import com.spring.store.api.models.Product;
 import com.spring.store.api.models.Size;
 import com.spring.store.api.repository.ProductRepository;
 import com.spring.store.api.repository.SizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,4 +24,12 @@ public class SizeController {
     public List<Size> getAllSizes() {
         return sizeRepository.findAll();
     }
+
+//    //    get all sizes
+//    @GetMapping("/sizes/{productId}")
+//    //  @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+//    public List<ProductSize> getProducts(@PathVariable("productId") Long productId) {
+//        List<ProductSize> productSizes = sizeRepository.findProductByProductId(productId);
+//        return sizeRepository.findProductByProductId(productId);
+//    }
 }
