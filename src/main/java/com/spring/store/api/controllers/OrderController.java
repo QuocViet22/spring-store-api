@@ -130,6 +130,7 @@ public class OrderController {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Order with id = " + orderId));
         order.setStatus(orderRequest.getStatus());
+        order.setModifiedDate(orderRequest.getModifiedDate());
         List<LineItemOrder> lineItemOrders = lineItemOrderRepository.findByOrderId(orderId);
         for (int i = 0; i < lineItemOrders.size(); i++) {
             if (Integer.valueOf(orderRequest.getStatus()) == 0) {
