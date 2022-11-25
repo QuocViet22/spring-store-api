@@ -71,6 +71,9 @@ public class ProductController {
                                                  @RequestBody Product productRequest) {
         Product product = categoryRepository.findById(categoryId).map(category -> {
             productRequest.setCategory(category);
+            if (Integer.valueOf(productRequest.getPrice()) < 0) {
+                throw new ResourceNotFoundException("Price is not valid!");
+            }
             return productRepository.save(productRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
         return new ResponseEntity<>(product, HttpStatus.CREATED);
