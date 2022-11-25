@@ -32,6 +32,7 @@ public class Product extends BaseModel {
 //    @Column(name = "amount")
 //    private String amount;
 
+    @Lob
     @Column(name = "description")
     private String description;
 

@@ -17,6 +17,7 @@ public class Image extends BaseModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
     @Column(name = "link")
     private String link;
 

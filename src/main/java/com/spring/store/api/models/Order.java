@@ -30,8 +30,8 @@ public class Order extends BaseModel {
     @OneToMany(mappedBy = "order")
     private Set<LineItemOrder> lineItemOrders = new HashSet<>();
 
-    @Column(name = "sale_off")
-    private String saleOff;
+//    @Column(name = "sale_off")
+//    private String saleOff;
 
     @Column(name = "vat")
     private String vat;

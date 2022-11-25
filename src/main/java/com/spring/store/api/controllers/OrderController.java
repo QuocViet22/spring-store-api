@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -37,6 +38,9 @@ public class OrderController {
     @Autowired
     private ProductInforRepository productInforRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     //    create order for user by user_id
     @Transactional
     @PostMapping("/orders/{userId}")
@@ -52,7 +56,7 @@ public class OrderController {
         order.setModifiedDate(orderRequest.getModifiedDate());
         order.setStatus(orderRequest.getStatus());
         order.setVat(orderRequest.getVat());
-        order.setSaleOff(orderRequest.getSaleOff());
+//        order.setSaleOff(orderRequest.getSaleOff());
         order.setTotalPrice(orderRequest.getTotalPrice());
         order.setAddress(orderRequest.getAddress());
         order.setName(orderRequest.getName());
@@ -66,8 +70,9 @@ public class OrderController {
             // Minus amount of product
             int amountOfLineItem = Integer.parseInt(lineItems.get(i).getAmount());
             Long productId = Long.valueOf(lineItems.get(i).getProduct().getId());
-            ProductInfor productInfor = productInforRepository.findBySizeAndProductId(lineItems.get(i).getSize(), productId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product!"));
+            String size = lineItems.get(i).getSize();
+            ProductInfor productInfor = productInforRepository.findBySizeAndProductId(size, productId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product id: " + productId + " and size id: " + size));
             int amountOfProduct = Integer.parseInt(productInfor.getAmount());
             if (amountOfProduct < amountOfLineItem) {
                 throw new ResourceNotFoundException("Product's amount is " + Integer.valueOf(amountOfProduct) + " .Please choose again!");
@@ -125,16 +130,21 @@ public class OrderController {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Order with id = " + orderId));
         order.setStatus(orderRequest.getStatus());
+        List<LineItemOrder> lineItemOrders = lineItemOrderRepository.findByOrderId(orderId);
+        for (int i = 0; i < lineItemOrders.size(); i++) {
+            if (Integer.valueOf(orderRequest.getStatus()) == 3) {
+                Product product = lineItemOrders.get(i).getProduct();
+                String size = lineItemOrders.get(i).getSize();
+                Long productId = Long.valueOf(product.getId());
+                ProductInfor productInfor = productInforRepository.findBySizeAndProductId(size, productId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product id: " + productId + " and size id: " + size));
+                int lineItemOrdersAmount = Integer.valueOf(lineItemOrders.get(i).getAmount());
+                int productInforAmount = Integer.valueOf(productInfor.getAmount());
+                productInfor.setAmount(String.valueOf(productInforAmount + lineItemOrdersAmount));
+                productInforRepository.save(productInfor);
+            }
+        }
         orderRepository.save(order);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
-
-//    //    cancel by id
-//    @DeleteMapping("/lineItem/{id}")
-//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
-//    public ResponseEntity<?> deleteLineItem(@PathVariable("id") long id) {
-//        lineItemRepository.deleteById(id);
-//        return ResponseEntity.ok().body(new MessageResponse("Line item has been deleted successfully!"));
-//    }
-
 }
