@@ -132,7 +132,7 @@ public class OrderController {
         order.setStatus(orderRequest.getStatus());
         List<LineItemOrder> lineItemOrders = lineItemOrderRepository.findByOrderId(orderId);
         for (int i = 0; i < lineItemOrders.size(); i++) {
-            if (Integer.valueOf(orderRequest.getStatus()) == 3) {
+            if (Integer.valueOf(orderRequest.getStatus()) == 0) {
                 Product product = lineItemOrders.get(i).getProduct();
                 String size = lineItemOrders.get(i).getSize();
                 Long productId = Long.valueOf(product.getId());
