@@ -24,14 +24,10 @@ public class RevenueController {
 //    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public RevenueByDateResponse getRevenueByDate(@RequestBody RevenueByDateRequest revenueByDateRequest) {
         List<IRevenueByDateResponse> iRevenueByDateResponses = revenueRepository.viewRevenueByDate(revenueByDateRequest.getModifiedDate());
-        int revenueByDate = 0;
-//        for (int i = 0; i < iRevenueByDateResponses.size(); i++) {
-//
-//        }
         RevenueByDateResponse revenueByDateResponse = new RevenueByDateResponse();
         revenueByDateResponse.setIRevenueByDateResponses(iRevenueByDateResponses);
         int revenue = 0;
-        for(int i=0;i<iRevenueByDateResponses.size();i++){
+        for (int i = 0; i < iRevenueByDateResponses.size(); i++) {
             revenue = revenue + iRevenueByDateResponses.get(i).getTotalPrice();
         }
         revenueByDateResponse.setRevenue(revenue);
