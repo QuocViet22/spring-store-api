@@ -64,7 +64,6 @@ public class UserController {
                                                 @RequestBody User userRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Id user " + id + " not found"));
-
         user.setAddress(userRequest.getAddress());
         user.setAge(userRequest.getAge());
         user.setEmail(userRequest.getEmail());

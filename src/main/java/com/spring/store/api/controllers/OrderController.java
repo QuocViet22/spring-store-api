@@ -101,7 +101,6 @@ public class OrderController {
         if (!userRepository.existsById(userId)) {
             throw new ResourceNotFoundException("Not found User with id = " + userId);
         }
-
         List<Order> orders = orderRepository.findByUserId(userId);
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
