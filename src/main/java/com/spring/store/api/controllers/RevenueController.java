@@ -24,7 +24,7 @@ public class RevenueController {
 
     //    retrieve revenue by date
     @GetMapping("/revenue/date")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public RevenueByDateResponse getRevenueByDate(@RequestBody RevenueByDateRequest revenueByDateRequest) {
         List<IRevenueByDateResponse> iRevenueByDateResponses = revenueRepository.viewRevenueByDate(revenueByDateRequest.getModifiedDate());
         RevenueByDateResponse revenueByDateResponse = new RevenueByDateResponse();
@@ -38,7 +38,7 @@ public class RevenueController {
     }
 
     @GetMapping("/revenue/month")
-//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public RevenueByMonthResponse getRevenueByMonth(@RequestBody RevenueByMonthRequest revenueByMonthRequest) {
         List<IRevenueByMonthResponse> iRevenueByMonthResponses = revenueRepository.viewRevenueByMonth(revenueByMonthRequest.getYear());
         RevenueByMonthResponse revenueByMonthResponse = new RevenueByMonthResponse();
