@@ -2,10 +2,12 @@ package com.spring.store.api.controllers;
 
 import com.spring.store.api.payload.request.RevenueByDateRequest;
 import com.spring.store.api.payload.request.RevenueByMonthRequest;
+import com.spring.store.api.payload.request.RevenuePerMonthRequest;
 import com.spring.store.api.payload.response.RevenueByDateResponse;
 import com.spring.store.api.payload.response.RevenueByMonthResponse;
 import com.spring.store.api.projection.IRevenueByDateResponse;
 import com.spring.store.api.projection.IRevenueByMonthResponse;
+import com.spring.store.api.projection.IRevenuePerMonthResponse;
 import com.spring.store.api.repository.RevenueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +54,7 @@ public class RevenueController {
         return revenueByMonthResponse;
     }
 
-    //    get best seller of month
+    //    get best seller of date
     @PostMapping("/bestSeller/date")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public RevenueByDateResponse bestSellerOfDate(@RequestBody RevenueByDateRequest revenueByDateRequest) {
@@ -67,4 +69,11 @@ public class RevenueController {
         return revenueByDateResponse;
     }
 
+    //    revenue per month
+    @PostMapping("/revenuePerMonth")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public List<IRevenuePerMonthResponse> revenuePerMonth(@RequestBody RevenuePerMonthRequest revenuePerMonthRequest) {
+        List<IRevenuePerMonthResponse> iRevenuePerMonthResponses = revenueRepository.viewRevenuePerMonth(revenuePerMonthRequest.getYear());
+        return iRevenuePerMonthResponses;
+    }
 }
