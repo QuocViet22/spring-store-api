@@ -18,8 +18,7 @@ public interface RevenueRepository extends JpaRepository<Order, Long> {
                     "from orders o join line_item_orders l on o.id = l.order_id\n" +
                     "where o.modified_date = ?1 and o.status = '3'\n" +
                     "group by o.modified_date, o.status, l.product_id\n" +
-                    "order by totalPrice desc\n" +
-                    "limit 5;",
+                    "order by totalPrice desc;",
             nativeQuery = true)
     public List<IRevenueByDateResponse> viewRevenueByDate(String modifiedDate);
 
@@ -38,7 +37,8 @@ public interface RevenueRepository extends JpaRepository<Order, Long> {
                     "from orders o join line_item_orders l on o.id = l.order_id\n" +
                     "where o.modified_date = ?1 and o.status = '3'\n" +
                     "group by o.modified_date, o.status, l.product_id\n" +
-                    "order by totalPrice desc;",
+                    "order by totalPrice desc\n" +
+                    "limit 5;",
             nativeQuery = true)
     public List<IRevenueByDateResponse> bestSellerOfDate(String modifiedDate);
 }
