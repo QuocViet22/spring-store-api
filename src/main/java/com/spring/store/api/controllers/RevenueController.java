@@ -23,7 +23,7 @@ public class RevenueController {
     RevenueRepository revenueRepository;
 
     //    retrieve revenue by date
-    @GetMapping("/revenue/date")
+    @PostMapping("/revenue/date")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public RevenueByDateResponse getRevenueByDate(@RequestBody RevenueByDateRequest revenueByDateRequest) {
         List<IRevenueByDateResponse> iRevenueByDateResponses = revenueRepository.viewRevenueByDate(revenueByDateRequest.getModifiedDate());
@@ -38,7 +38,7 @@ public class RevenueController {
     }
 
     //    retrieve revenue by month
-    @GetMapping("/revenue/month")
+    @PostMapping("/revenue/month")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public RevenueByMonthResponse getRevenueByMonth(@RequestBody RevenueByMonthRequest revenueByMonthRequest) {
         List<IRevenueByMonthResponse> iRevenueByMonthResponses = revenueRepository.viewRevenueByMonth(revenueByMonthRequest.getYear());
@@ -53,7 +53,7 @@ public class RevenueController {
     }
 
     //    get best seller of month
-    @GetMapping("/bestSeller/date")
+    @PostMapping("/bestSeller/date")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public RevenueByDateResponse bestSellerOfDate(@RequestBody RevenueByDateRequest revenueByDateRequest) {
         List<IRevenueByDateResponse> iRevenueByDateResponses = revenueRepository.bestSellerOfDate(revenueByDateRequest.getModifiedDate());
