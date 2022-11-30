@@ -43,7 +43,7 @@ public class RevenueController {
     @PostMapping("/revenue/month")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public RevenueByMonthResponse getRevenueByMonth(@RequestBody RevenueByMonthRequest revenueByMonthRequest) {
-        List<IRevenueByMonthResponse> iRevenueByMonthResponses = revenueRepository.viewRevenueByMonth(revenueByMonthRequest.getYear());
+        List<IRevenueByMonthResponse> iRevenueByMonthResponses = revenueRepository.viewRevenueByMonth(revenueByMonthRequest.getMonth(), revenueByMonthRequest.getYear());
         RevenueByMonthResponse revenueByMonthResponse = new RevenueByMonthResponse();
         revenueByMonthResponse.setIRevenueByMonthResponses(iRevenueByMonthResponses);
         int revenueByMonth = 0;
@@ -55,18 +55,18 @@ public class RevenueController {
     }
 
     //    get best seller of date
-    @PostMapping("/bestSeller/date")
+    @PostMapping("/bestSeller")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
-    public RevenueByDateResponse bestSellerOfDate(@RequestBody RevenueByDateRequest revenueByDateRequest) {
-        List<IRevenueByDateResponse> iRevenueByDateResponses = revenueRepository.bestSellerOfDate(revenueByDateRequest.getModifiedDate());
-        RevenueByDateResponse revenueByDateResponse = new RevenueByDateResponse();
-        revenueByDateResponse.setIRevenueByDateResponses(iRevenueByDateResponses);
+    public RevenueByMonthResponse bestSellerOfDate(@RequestBody RevenueByMonthRequest revenueByMonthRequest) {
+        List<IRevenueByMonthResponse> iRevenueByMonthResponses = revenueRepository.bestSellerOfDate(revenueByMonthRequest.getMonth(), revenueByMonthRequest.getYear());
+        RevenueByMonthResponse revenueByMonthResponse = new RevenueByMonthResponse();
+        revenueByMonthResponse.setIRevenueByMonthResponses(iRevenueByMonthResponses);
         int revenue = 0;
-        for (int i = 0; i < iRevenueByDateResponses.size(); i++) {
-            revenue = revenue + iRevenueByDateResponses.get(i).getTotalPrice();
+        for (int i = 0; i < iRevenueByMonthResponses.size(); i++) {
+            revenue = revenue + iRevenueByMonthResponses.get(i).getTotalPrice();
         }
-        revenueByDateResponse.setRevenue(revenue);
-        return revenueByDateResponse;
+        revenueByMonthResponse.setRevenueByMonth(revenue);
+        return revenueByMonthResponse;
     }
 
     //    revenue per month

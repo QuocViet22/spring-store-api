@@ -27,21 +27,21 @@ public interface RevenueRepository extends JpaRepository<Order, Long> {
     @Query(value =
             "select EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')) as month, SUM(CAST(o.total_price as int)) as totalPrice, l.product_id as productId, SUM(CAST(l.amount as int)) as amountProduct\n" +
                     "from orders o join line_item_orders l on o.id = l.order_id\n" +
-                    "where EXTRACT(year FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?1 and o.status = '3'\n" +
+                    "where o.status = '3' and EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?1 and EXTRACT(year FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?2\n" +
                     "group by EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')), l.product_id;",
             nativeQuery = true)
-    public List<IRevenueByMonthResponse> viewRevenueByMonth(int year);
+    public List<IRevenueByMonthResponse> viewRevenueByMonth(int month, int year);
 
-    //    top 5 best seller
+    //    top 5 best seller of month
     @Query(value =
-            "select o.modified_date as modifiedDate, SUM(CAST(o.total_price as int)) as totalPrice, o.status as status, l.product_id as productId, SUM(CAST(l.amount as int)) as productAmount\n" +
+            "select EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')) as month, SUM(CAST(o.total_price as int)) as totalPrice, l.product_id as productId, SUM(CAST(l.amount as int)) as amountProduct\n" +
                     "from orders o join line_item_orders l on o.id = l.order_id\n" +
-                    "where o.modified_date = ?1 and o.status = '3'\n" +
-                    "group by o.modified_date, o.status, l.product_id\n" +
-                    "order by totalPrice desc\n" +
+                    "where EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?1 and EXTRACT(year FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?2 and o.status = '3'\n" +
+                    "group by EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')), l.product_id\n" +
+                    "order by amountProduct desc\n" +
                     "limit 5;",
             nativeQuery = true)
-    public List<IRevenueByDateResponse> bestSellerOfDate(String modifiedDate);
+    public List<IRevenueByMonthResponse> bestSellerOfDate(int month, int year);
 
     //    revenue by month
     @Query(value =

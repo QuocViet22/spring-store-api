@@ -10,4 +10,7 @@ import javax.validation.constraints.NotBlank;
 public class RevenueByMonthRequest {
     @NotBlank
     private int year;
+
+    @NotBlank
+    private int month;
 }
