@@ -30,7 +30,7 @@ public interface RevenueRepository extends JpaRepository<Order, Long> {
                     "where o.status = '3' and EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?1 and EXTRACT(year FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?2\n" +
                     "group by EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')), l.product_id, l.total;",
             nativeQuery = true)
-    public List<IRevenueByMonthResponse>    viewRevenueByMonth(int month, int year);
+    public List<IRevenueByMonthResponse> viewRevenueByMonth(int month, int year);
 
     //    top 5 best seller of month
     @Query(value =
@@ -45,10 +45,10 @@ public interface RevenueRepository extends JpaRepository<Order, Long> {
 
     //    revenue by month
     @Query(value =
-            "select EXTRACT(month FROM TO_DATE(o.modified_date,'dd/mm/yyyy')) as month, o.total_price as totalPrice\n" +
+            "select EXTRACT(month FROM TO_DATE(o.modified_date,'dd/mm/yyyy')) as month, SUM(CAST(l.total as int)) as totalPrice\n" +
                     "from orders o join line_item_orders l on o.id = l.order_id\n" +
-                    "where EXTRACT(year FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?1 and o.status = '3'\n" +
-                    "group by EXTRACT(month FROM TO_DATE(o.modified_date,'dd/mm/yyyy')), o.total_price;",
+                    "where EXTRACT(year FROM TO_DATE(modified_date,'dd/mm/yyyy')) = '2022' and o.status = '3'\n" +
+                    "group by EXTRACT(month FROM TO_DATE(o.modified_date,'dd/mm/yyyy'));\n",
             nativeQuery = true)
     public List<IRevenuePerMonthResponse> viewRevenuePerMonth(int year);
 
