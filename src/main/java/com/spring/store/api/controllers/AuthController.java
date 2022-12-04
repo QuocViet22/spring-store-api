@@ -67,31 +67,32 @@ public class AuthController {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         AccountDetailsImpl accountDetails = (AccountDetailsImpl) authentication.getPrincipal();
 
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(accountDetails);
+
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         List<String> roles = accountDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-//        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-//                .body(new AccountInfoResponse(
-//						accountDetails.getId(),
-//                        accountDetails.get
-//                        accountDetails.getUsername(),
-////                    userDetails.getEmail(),
-//                        roles));
+        Account account = accountRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Account with user name: " + loginRequest.getUsername()));
+
+        User user = userRepository.findById(account.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Not found User!"));
+
+        String name = user.getName();
+
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new AccountInfoResponse(
                         jwt,
                         accountDetails.getId(),
                         accountDetails.getUsername(),
-//                    userDetails.getEmail(),
+                        name,
                         roles));
     }
 

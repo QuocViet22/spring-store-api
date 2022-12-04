@@ -3,60 +3,62 @@ package com.spring.store.api.payload.response;
 import java.util.List;
 
 public class AccountInfoResponse {
-	private String token;
-	private String type = "Bearer";
-	private Long id;
-	private String username;
-	private List<String> roles;
+    private String token;
+    private String type = "Bearer";
+    private Long id;
+    private String username;
+    private String name;
+    private List<String> roles;
 
-	public AccountInfoResponse(String accessToken, Long id, String username, /*String email,*/ List<String> roles) {
-		this.token = accessToken;
-		this.id = id;
-		this.username = username;
-		this.roles = roles;
-	}
+    public AccountInfoResponse(String accessToken, Long id, String username, String name, List<String> roles) {
+        this.token = accessToken;
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.roles = roles;
+    }
 
-	public String getAccessToken() {
-		return token;
-	}
+    public String getAccessToken() {
+        return token;
+    }
 
-	public void setAccessToken(String accessToken) {
-		this.token = accessToken;
-	}
+    public void setAccessToken(String accessToken) {
+        this.token = accessToken;
+    }
 
-	public String getTokenType() {
-		return type;
-	}
+    public String getTokenType() {
+        return type;
+    }
 
-	public void setTokenType(String tokenType) {
-		this.type = tokenType;
-	}
+    public void setTokenType(String tokenType) {
+        this.type = tokenType;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-//	public String getEmail() {
-//		return email;
-//	}
-//
-//	public void setEmail(String email) {
-//		this.email = email;
-//	}
+    public String getName() {
+        return name;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public List<String> getRoles() {
-		return roles;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
 }
