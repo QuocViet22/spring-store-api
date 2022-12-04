@@ -56,7 +56,7 @@ public class RevenueController {
 
     //    get best seller of date
     @PostMapping("/bestSeller")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    //    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public RevenueByMonthResponse bestSellerOfDate(@RequestBody RevenueByMonthRequest revenueByMonthRequest) {
         List<IRevenueByMonthResponse> iRevenueByMonthResponses = revenueRepository.bestSellerOfDate(revenueByMonthRequest.getMonth(), revenueByMonthRequest.getYear());
         RevenueByMonthResponse revenueByMonthResponse = new RevenueByMonthResponse();

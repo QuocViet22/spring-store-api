@@ -47,7 +47,7 @@ public interface RevenueRepository extends JpaRepository<Order, Long> {
     @Query(value =
             "select EXTRACT(month FROM TO_DATE(o.modified_date,'dd/mm/yyyy')) as month, SUM(CAST(l.total as int)) as totalPrice\n" +
                     "from orders o join line_item_orders l on o.id = l.order_id\n" +
-                    "where EXTRACT(year FROM TO_DATE(modified_date,'dd/mm/yyyy')) = '2022' and o.status = '3'\n" +
+                    "where EXTRACT(year FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?1 and o.status = '3'\n" +
                     "group by EXTRACT(month FROM TO_DATE(o.modified_date,'dd/mm/yyyy'));\n",
             nativeQuery = true)
     public List<IRevenuePerMonthResponse> viewRevenuePerMonth(int year);
