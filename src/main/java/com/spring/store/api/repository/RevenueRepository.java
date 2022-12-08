@@ -15,20 +15,20 @@ public interface RevenueRepository extends JpaRepository<Order, Long> {
 
     //    revenue by date
     @Query(value =
-            "select o.modified_date as modifiedDate, l.total as totalPrice, o.status as status, l.product_id as productId, SUM(CAST(l.amount as int)) as productAmount\n" +
+            "select o.modified_date as modifiedDate, SUM(CAST(l.total as int)) as totalPrice, o.status as status, l.product_id as productId, SUM(CAST(l.amount as int)) as productAmount\n" +
                     "from orders o join line_item_orders l on o.id = l.order_id\n" +
                     "where o.modified_date = ?1 and o.status = '3'\n" +
-                    "group by o.modified_date, o.status, l.product_id, l.total\n" +
-                    "order by totalPrice desc;\n",
+                    "group by o.modified_date, o.status, l.product_id\n" +
+                    "order by totalPrice desc;",
             nativeQuery = true)
     public List<IRevenueByDateResponse> viewRevenueByDate(String modifiedDate);
 
     //    revenue by month
     @Query(value =
-            "select EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')) as month, l.total as totalPrice, l.product_id as productId, SUM(CAST(l.amount as int)) as amountProduct\n" +
+            "select EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')) as month, SUM(CAST(l.total as int)) as totalPrice, l.product_id as productId, SUM(CAST(l.amount as int)) as amountProduct\n" +
                     "from orders o join line_item_orders l on o.id = l.order_id\n" +
                     "where o.status = '3' and EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?1 and EXTRACT(year FROM TO_DATE(modified_date,'dd/mm/yyyy')) = ?2\n" +
-                    "group by EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')), l.product_id, l.total;",
+                    "group by EXTRACT(MONTH FROM TO_DATE(modified_date,'dd/mm/yyyy')), l.product_id;\n",
             nativeQuery = true)
     public List<IRevenueByMonthResponse> viewRevenueByMonth(int month, int year);
 
