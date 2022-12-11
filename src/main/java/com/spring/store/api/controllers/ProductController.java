@@ -1,6 +1,7 @@
 package com.spring.store.api.controllers;
 
 import com.spring.store.api.exception.ResourceNotFoundException;
+import com.spring.store.api.models.Category;
 import com.spring.store.api.models.Product;
 import com.spring.store.api.payload.response.MessageResponse;
 import com.spring.store.api.repository.CategoryRepository;
@@ -69,13 +70,25 @@ public class ProductController {
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Product> createProduct(@PathVariable(value = "categoryId") Long categoryId,
                                                  @RequestBody Product productRequest) {
-        Product product = categoryRepository.findById(categoryId).map(category -> {
-            productRequest.setCategory(category);
-            if (Integer.valueOf(productRequest.getPrice()) < 0) {
-                throw new ResourceNotFoundException("Price is not valid!");
-            }
-            return productRepository.save(productRequest);
-        }).orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
+//        Product product = categoryRepository.findById(categoryId).map(category -> {
+//            productRequest.setCategory(category);
+//            if (Integer.valueOf(productRequest.getPrice()) < 0) {
+//                throw new ResourceNotFoundException("Price is not valid!");
+//            }
+//            return productRepository.save(productRequest);
+//        }).orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
+        Product product = new Product();
+        product.setCategory(category);
+        if (productRepository.existsByName(productRequest.getName())) {
+            throw new ResourceNotFoundException("This product's name has been existed!");
+        }
+        if (Integer.valueOf(productRequest.getPrice()) < 0) {
+            throw new ResourceNotFoundException("Price is not valid!");
+        }
+
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 

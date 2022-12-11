@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByCategoryId(Long categoryId);
 
+    Boolean existsByName(String name);
+
     String query =
             "SELECT p.* FROM products p " +
                     "INNER JOIN images i ON products.id=images.product_id" +
