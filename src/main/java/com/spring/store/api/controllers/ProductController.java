@@ -98,6 +98,9 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@PathVariable("id") long id, @RequestBody Product productRequest) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product Id " + id + "not found"));
+        if (productRepository.existsByName(productRequest.getName())) {
+            throw new ResourceNotFoundException("This product's name has been existed!");
+        }
         product.setName(productRequest.getName());
         product.setPrice(productRequest.getPrice());
         product.setStatus(productRequest.getStatus());
