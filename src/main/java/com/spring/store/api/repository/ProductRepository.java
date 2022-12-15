@@ -15,6 +15,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Boolean existsByName(String name);
 
+    Optional<Product> existedProductByName(String name);
+
+
     String query =
             "SELECT p.* FROM products p " +
                     "INNER JOIN images i ON products.id=images.product_id" +

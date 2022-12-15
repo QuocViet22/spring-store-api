@@ -81,10 +81,10 @@ public class ProductController {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
         Product product = new Product();
-        product.setCategory(category);
         if (productRepository.existsByName(productRequest.getName())) {
             throw new ResourceNotFoundException("This product's name has been existed!");
         }
+        product.setCategory(category);
         if (Integer.valueOf(productRequest.getPrice()) < 0) {
             throw new ResourceNotFoundException("Price is not valid!");
         }
@@ -98,9 +98,10 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@PathVariable("id") long id, @RequestBody Product productRequest) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product Id " + id + "not found"));
-        if (productRepository.existsByName(productRequest.getName())) {
-            throw new ResourceNotFoundException("This product's name has been existed!");
-        }
+//        Boolean productName = Boolean.valueOf(product.getName());
+//        if (productRepository.existsByName(productRequest.getName()) && productName) {
+//            throw new ResourceNotFoundException("This product's name has been existed!");
+//        }
         product.setName(productRequest.getName());
         product.setPrice(productRequest.getPrice());
         product.setStatus(productRequest.getStatus());
