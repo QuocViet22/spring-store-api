@@ -70,25 +70,29 @@ public class ProductController {
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Product> createProduct(@PathVariable(value = "categoryId") Long categoryId,
                                                  @RequestBody Product productRequest) {
-//        Product product = categoryRepository.findById(categoryId).map(category -> {
-//            productRequest.setCategory(category);
-//            if (Integer.valueOf(productRequest.getPrice()) < 0) {
-//                throw new ResourceNotFoundException("Price is not valid!");
-//            }
-//            return productRepository.save(productRequest);
-//        }).orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
+        Product product = categoryRepository.findById(categoryId).map(category -> {
+            productRequest.setCategory(category);
+            if (productRepository.existsByName(productRequest.getName())) {
+                throw new ResourceNotFoundException("This product's name has been existed!");
+            }
+            if (Integer.valueOf(productRequest.getPrice()) < 0) {
+                throw new ResourceNotFoundException("Price is not valid!");
+            }
+            return productRepository.save(productRequest);
+        }).orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
 
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
-        Product product = new Product();
-        if (productRepository.existsByName(productRequest.getName())) {
-            throw new ResourceNotFoundException("This product's name has been existed!");
-        }
-        product.setCategory(category);
-        if (Integer.valueOf(productRequest.getPrice()) < 0) {
-            throw new ResourceNotFoundException("Price is not valid!");
-        }
-        productRepository.save(product);
+//        Category category = categoryRepository.findById(categoryId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
+//        Product product = new Product();
+//        if (productRepository.existsByName(productRequest.getName())) {
+//            throw new ResourceNotFoundException("This product's name has been existed!");
+//        }
+//        product.setCategory(category);
+//        if (Integer.valueOf(productRequest.getPrice()) < 0) {
+//            throw new ResourceNotFoundException("Price is not valid!");
+//        }
+//        productRepository.save(product);
+
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
