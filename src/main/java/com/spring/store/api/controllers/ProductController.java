@@ -88,7 +88,7 @@ public class ProductController {
         if (Integer.valueOf(productRequest.getPrice()) < 0) {
             throw new ResourceNotFoundException("Price is not valid!");
         }
-
+        productRepository.save(productRequest);
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
