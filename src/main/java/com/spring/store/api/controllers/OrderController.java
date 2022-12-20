@@ -63,6 +63,8 @@ public class OrderController {
         order.setName(orderRequest.getName());
         order.setPhoneNumber(orderRequest.getPhoneNumber());
         order.setEmail(orderRequest.getEmail());
+        String randomNumber = emailService.createRandomNumber();
+        order.setNumber(randomNumber);
         orderRepository.save(order);
 
         WishList wishList = wishListRepository.findByUserId(userId);
@@ -93,7 +95,7 @@ public class OrderController {
         }
         orderRepository.save(order);
         lineItemRepository.deleteAllByWishListId(wishList.getId());
-        emailService.sendMail(order.getEmail(), emailService.createRandomNumber());
+        emailService.sendMail(order.getEmail(), randomNumber);
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
 
