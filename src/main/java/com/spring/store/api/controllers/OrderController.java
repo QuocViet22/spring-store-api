@@ -3,6 +3,7 @@ package com.spring.store.api.controllers;
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.*;
 import com.spring.store.api.repository.*;
+import com.spring.store.api.services.EmailService;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class OrderController {
     private ProductInforRepository productInforRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private EmailService emailService;
 
     //    create order for user by user_id
     @Transactional
@@ -61,6 +62,7 @@ public class OrderController {
         order.setAddress(orderRequest.getAddress());
         order.setName(orderRequest.getName());
         order.setPhoneNumber(orderRequest.getPhoneNumber());
+        order.setEmail(orderRequest.getEmail());
         orderRepository.save(order);
 
         WishList wishList = wishListRepository.findByUserId(userId);
@@ -91,6 +93,7 @@ public class OrderController {
         }
         orderRepository.save(order);
         lineItemRepository.deleteAllByWishListId(wishList.getId());
+        emailService.sendMail(order.getEmail(), emailService.createRandomNumber());
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
 

@@ -47,4 +47,10 @@ public class Order extends BaseModel {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "number")
+    private String number;
 }

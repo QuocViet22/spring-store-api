@@ -80,19 +80,6 @@ public class ProductController {
             }
             return productRepository.save(productRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
-
-//        Category category = categoryRepository.findById(categoryId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + categoryId));
-//        Product product = new Product();
-//        if (productRepository.existsByName(productRequest.getName())) {
-//            throw new ResourceNotFoundException("This product's name has been existed!");
-//        }
-//        product.setCategory(category);
-//        if (Integer.valueOf(productRequest.getPrice()) < 0) {
-//            throw new ResourceNotFoundException("Price is not valid!");
-//        }
-//        productRepository.save(product);
-
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
