@@ -63,11 +63,11 @@ public class ProductController {
         //        return productRepository.findAllProduct();
 //        List<IFilterProductResponse> iFilterProductResponses = productRepository.findProductBySizeAndPrice(filterProductRequest.getSize(), filterProductRequest.getPrice());
 //        return iFilterProductResponses;
-        if (filterProductRequest.getSize() == null && filterProductRequest.getPrice() == null)
+        if (filterProductRequest.getSize() == null && filterProductRequest.getPrice() == 0)
             return productRepository.findAll();
         else if (filterProductRequest.getSize() == null) {
             return productRepository.findProductByPrice(filterProductRequest.getPrice());
-        } else if (filterProductRequest.getPrice() == null) {
+        } else if (filterProductRequest.getPrice() == 0) {
             return productRepository.findProductBySize(filterProductRequest.getSize());
         } else
             return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize());

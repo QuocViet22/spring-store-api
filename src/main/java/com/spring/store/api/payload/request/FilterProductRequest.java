@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FilterProductRequest {
+    int price;
     String size;
-    String price;
 }
