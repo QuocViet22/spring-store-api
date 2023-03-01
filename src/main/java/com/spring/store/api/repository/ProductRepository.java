@@ -33,7 +33,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT p.* FROM Products p " +
 //            "INNER JOIN Product_infors s ON p.id = s.product_id " +
-            "WHERE p.price<=(?1)", nativeQuery = true)
+            "WHERE CAST(p.price as INTEGER)<=(?1)", nativeQuery = true)
     List<Product> findProductByPrice(String price);
 
     //    @Query(value = "SELECT p.name FROM Products p " +
@@ -41,7 +41,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 //            "WHERE s.size=?1 AND p.price=?2", nativeQuery = true)
     @Query(value = "select p.*\n" +
             "from products p inner join product_infors i on p.id = i.product_id\n" +
-            "where p.price<=(?1) and i.size=(?2);", nativeQuery = true)
+            "where CAST(p.price as INTEGER)<=(?1) and i.size=(?2);", nativeQuery = true)
 //    List<IFilterProductResponse> findProductBySizeAndPrice(String size, String price);
     List<Product> findProductByPriceAndSize(String price, String size);
 
