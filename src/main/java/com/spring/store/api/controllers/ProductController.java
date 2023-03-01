@@ -3,7 +3,9 @@ package com.spring.store.api.controllers;
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.Category;
 import com.spring.store.api.models.Product;
+import com.spring.store.api.payload.request.FilterProductRequest;
 import com.spring.store.api.payload.response.MessageResponse;
+import com.spring.store.api.projection.IFilterProductResponse;
 import com.spring.store.api.repository.CategoryRepository;
 import com.spring.store.api.repository.ProductRepository;
 
@@ -38,11 +40,37 @@ public class ProductController {
     }
 
     //    get all products by size
-    @GetMapping("/products/{size}")
+    @GetMapping("/products/{size}/size")
     //  @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
-    public List<Product> getAllProductsBySize(@PathVariable(value = "size") Long size) {
+    public List<Product> getAllProductsBySize(@PathVariable(value = "size") String size) {
         return productRepository.findProductBySize(size);
         //        return productRepository.findAllProduct();
+    }
+
+    //    get all product by size and price
+//    public List<Product> getAllProductsBySizeAndPrice(@RequestBody FilterProductRequest filterProductRequest) {
+//        //        return productRepository.findAllProduct();
+//
+//        if (filterProductRequest.getSize() == null) {
+//            return productRepository.findProductByPrice(filterProductRequest.getPrice());
+//        } else if (filterProductRequest.getPrice() == null) {
+//            return productRepository.findProductBySize(filterProductRequest.getSize());
+//        } else
+//            return productRepository.findProductBySizeAndPrice(filterProductRequest.getSize(), filterProductRequest.getPrice());
+//    }
+    @GetMapping("/products/filter")
+    public List<Product> getAllProductsBySizeAndPrice(@RequestBody FilterProductRequest filterProductRequest) {
+        //        return productRepository.findAllProduct();
+//        List<IFilterProductResponse> iFilterProductResponses = productRepository.findProductBySizeAndPrice(filterProductRequest.getSize(), filterProductRequest.getPrice());
+//        return iFilterProductResponses;
+        if (filterProductRequest.getSize() == null && filterProductRequest.getPrice() == null)
+            return productRepository.findAll();
+        else if (filterProductRequest.getSize() == null) {
+            return productRepository.findProductByPrice(filterProductRequest.getPrice());
+        } else if (filterProductRequest.getPrice() == null) {
+            return productRepository.findProductBySize(filterProductRequest.getSize());
+        } else
+            return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize());
     }
 
     //    retrieve all Products of a Category

@@ -1,6 +1,7 @@
 package com.spring.store.api.repository;
 
 import com.spring.store.api.models.Product;
+import com.spring.store.api.projection.IFilterProductResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -26,7 +27,22 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllProduct();
 
     @Query(value = "SELECT p.* FROM Products p " +
-            "INNER JOIN Product_sizes s ON p.id = s.product_id " +
-            "WHERE s.size_id=?1", nativeQuery = true)
-    List<Product> findProductBySize(Long sizeId);
+            "INNER JOIN Product_infors i ON p.id = i.product_id " +
+            "WHERE i.size=(?1)", nativeQuery = true)
+    List<Product> findProductBySize(String size);
+
+    @Query(value = "SELECT p.* FROM Products p " +
+//            "INNER JOIN Product_infors s ON p.id = s.product_id " +
+            "WHERE p.price=(?1)", nativeQuery = true)
+    List<Product> findProductByPrice(String price);
+
+    //    @Query(value = "SELECT p.name FROM Products p " +
+//            "INNER JOIN Product_infors s ON p.id = s.product_id " +
+//            "WHERE s.size=?1 AND p.price=?2", nativeQuery = true)
+    @Query(value = "select p.*\n" +
+            "from products p inner join product_infors i on p.id = i.product_id\n" +
+            "where p.price=(?1) and i.size=(?2);", nativeQuery = true)
+//    List<IFilterProductResponse> findProductBySizeAndPrice(String size, String price);
+    List<Product> findProductByPriceAndSize(String price, String size);
+
 }
