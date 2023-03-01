@@ -41,7 +41,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 //            "WHERE s.size=?1 AND p.price=?2", nativeQuery = true)
     @Query(value = "select p.*\n" +
             "from products p inner join product_infors i on p.id = i.product_id\n" +
-            "where p.price=(?1) and i.size=(?2);", nativeQuery = true)
+            "where p.price<=(?1) and i.size=(?2);", nativeQuery = true)
 //    List<IFilterProductResponse> findProductBySizeAndPrice(String size, String price);
     List<Product> findProductByPriceAndSize(String price, String size);
 
