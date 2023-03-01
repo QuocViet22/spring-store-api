@@ -58,7 +58,7 @@ public class ProductController {
 //        } else
 //            return productRepository.findProductBySizeAndPrice(filterProductRequest.getSize(), filterProductRequest.getPrice());
 //    }
-    @GetMapping("/products/filter")
+    @PostMapping("/products/filter")
     public List<Product> getAllProductsBySizeAndPrice(@RequestBody FilterProductRequest filterProductRequest) {
         //        return productRepository.findAllProduct();
 //        List<IFilterProductResponse> iFilterProductResponses = productRepository.findProductBySizeAndPrice(filterProductRequest.getSize(), filterProductRequest.getPrice());
