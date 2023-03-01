@@ -33,7 +33,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT p.* FROM Products p " +
 //            "INNER JOIN Product_infors s ON p.id = s.product_id " +
-            "WHERE p.price=(?1)", nativeQuery = true)
+            "WHERE p.price<=(?1)", nativeQuery = true)
     List<Product> findProductByPrice(String price);
 
     //    @Query(value = "SELECT p.name FROM Products p " +
