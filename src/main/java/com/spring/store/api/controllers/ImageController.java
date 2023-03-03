@@ -33,9 +33,8 @@ public class ImageController {
         if (!productRepository.existsById(productId)) {
             throw new ResourceNotFoundException("Not found Product with id = " + productId);
         }
-
 //        List<Image> images = imageRepository.findByProductId(productId);
-        List<Image> images = imageRepository.orderByProductId(productId);
+        List<Image> images = imageRepository.orderByProductId("wtf");
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
@@ -45,7 +44,6 @@ public class ImageController {
     public ResponseEntity<Image> getImagesByProductId(@PathVariable(value = "id") Long id) {
         Image image = imageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Image with id = " + id));
-
         return new ResponseEntity<>(image, HttpStatus.OK);
     }
 
@@ -58,7 +56,6 @@ public class ImageController {
             imageRequest.setProduct(product);
             return imageRepository.save(imageRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + productId));
-
         return new ResponseEntity<>(image, HttpStatus.CREATED);
     }
 
@@ -68,7 +65,6 @@ public class ImageController {
     public ResponseEntity<?> updateImage(@PathVariable("id") long id, @RequestBody Image imageRequest) {
         Image image = imageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Image Id " + id + "not found"));
-
         image.setLink(imageRequest.getLink());
         imageRepository.save(image);
         return ResponseEntity.ok().body(new MessageResponse("Image has been updated successfully!"));
