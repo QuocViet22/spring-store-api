@@ -2,6 +2,7 @@ package com.spring.store.api.controllers;
 
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.Voucher;
+import com.spring.store.api.payload.request.VoucherRequest;
 import com.spring.store.api.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,13 +36,12 @@ public class VoucherController {
         return new ResponseEntity<>(voucher, HttpStatus.OK);
     }
 
-//    //    get voucher by name
-//    @GetMapping("/vouchers/{id}")
-//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
-//    public ResponseEntity<Voucher> getVoucherByName(@PathVariable("id") long id) {
-//        Voucher voucher = voucherRepository.findByName(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Not found Voucher with id = " + id));
-//
-//        return new ResponseEntity<>(voucher, HttpStatus.OK);
-//    }
+    //    get voucher by name
+    @PostMapping("/vouchers/search")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<Voucher> getVoucherByName(@RequestBody VoucherRequest voucherRequest) {
+        Voucher voucher = voucherRepository.findByName(voucherRequest.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("Not found voucher: " + voucherRequest.getName()));
+        return new ResponseEntity<>(voucher, HttpStatus.OK);
+    }
 }

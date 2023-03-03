@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VoucherRepository extends JpaRepository<Voucher, Long> {
     @Query(value = "select p.*\n" +
             "from vouchers v\n" +
-            "where v.name LIKE ?1%", nativeQuery = true)
-    List<Voucher> findByName(String name);
+            "where v.name LIKE CONCAT('%', ?1,'%');", nativeQuery = true)
+    Optional<Voucher> findByName(String name);
 }
