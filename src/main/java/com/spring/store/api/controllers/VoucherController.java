@@ -3,6 +3,7 @@ package com.spring.store.api.controllers;
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.Voucher;
 import com.spring.store.api.payload.request.VoucherRequest;
+import com.spring.store.api.payload.response.MessageResponse;
 import com.spring.store.api.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,39 @@ public class VoucherController {
         Voucher voucher = voucherRepository.findByName(voucherRequest.getName())
                 .orElseThrow(() -> new ResourceNotFoundException("Not found voucher: " + voucherRequest.getName()));
         return new ResponseEntity<>(voucher, HttpStatus.OK);
+    }
+
+    //     create voucher
+    @PostMapping("/voucher")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Voucher> createVoucher(@RequestBody Voucher voucherRequest) {
+        Voucher voucher = new Voucher();
+        voucher.setName(voucherRequest.getName());
+        voucher.setQuantity(voucherRequest.getQuantity());
+        voucher.setValue(voucherRequest.getValue());
+        voucher.setStatus(voucherRequest.getStatus());
+        voucherRepository.save(voucher);
+        return new ResponseEntity<>(voucher, HttpStatus.CREATED);
+    }
+
+    //    update voucher by id
+    @PutMapping("/voucher/{id}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<?> updateVoucher(@PathVariable("id") long id, @RequestBody Voucher voucherRequest) {
+        Voucher voucher = voucherRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Voucher Id " + id + "not found"));
+        voucher.setName(voucherRequest.getName());
+        voucher.setQuantity(voucherRequest.getQuantity());
+        voucher.setValue(voucherRequest.getValue());
+        voucher.setStatus(voucherRequest.getStatus());
+        voucherRepository.save(voucher);
+        return ResponseEntity.ok().body(new MessageResponse("Voucher has been updated successfully!"));
+    }
+
+    //    delete voucher by id
+    @DeleteMapping("/voucher/{id}")
+    public ResponseEntity<?> deleteVoucher(@PathVariable("id") long id) {
+        voucherRepository.deleteById(id);
+        return ResponseEntity.ok().body(new MessageResponse("Voucher has been deleted successfully!"));
     }
 }
