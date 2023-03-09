@@ -62,6 +62,19 @@ public class OrderController {
         order.setAddress(orderRequest.getAddress());
         order.setName(orderRequest.getName());
         order.setPhoneNumber(orderRequest.getPhoneNumber());
+
+//        Calculate order_price
+        float vat = Float.parseFloat(order.getVat());
+        float feeShip = Float.parseFloat(order.getFeeShip());
+        float voucher = Float.parseFloat(order.getVoucher());
+        float totalPrice = Float.parseFloat(order.getTotalPrice());
+        float orderPrice = totalPrice + feeShip + totalPrice * vat - totalPrice * voucher;
+
+        order.setOrderPrice(String.valueOf(orderPrice));
+        order.setPaymentStatus(order.getPaymentStatus());
+        order.setPaymentStatus(order.getPaymentType());
+
+//        Send email to user
         order.setEmail(orderRequest.getEmail());
         String randomNumber = emailService.createRandomNumber();
         order.setNumber(randomNumber);
@@ -95,6 +108,8 @@ public class OrderController {
         }
         orderRepository.save(order);
         lineItemRepository.deleteAllByWishListId(wishList.getId());
+
+//        Send mail
         emailService.sendMail(order.getEmail(), randomNumber);
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
