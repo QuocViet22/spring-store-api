@@ -33,9 +33,6 @@ public class Order extends BaseModel {
 //    @Column(name = "sale_off")
 //    private String saleOff;
 
-    @Column(name = "vat")
-    private String vat;
-
     @Column(name = "total_price")
     private String totalPrice;
 
@@ -53,4 +50,22 @@ public class Order extends BaseModel {
 
     @Column(name = "number")
     private String number;
+
+    @Column(name = "vat")
+    private String vat;
+
+    @Column(name = "fee_ship")
+    private String feeShip;
+
+    @Column(name = "voucher")
+    private String voucher;
+
+    @Column(name = "payment_status")
+    private String paymentStatus;
+
+    @Column(name = "payment_type")
+    private String paymentType;
+
+    @Column(name = "order_price")
+    private String orderPrice;
 }

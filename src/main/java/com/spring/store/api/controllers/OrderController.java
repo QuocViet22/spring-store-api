@@ -56,12 +56,27 @@ public class OrderController {
         order.setModifiedBy(orderRequest.getModifiedBy());
         order.setModifiedDate(orderRequest.getModifiedDate());
         order.setStatus(orderRequest.getStatus());
-        order.setVat(orderRequest.getVat());
-//        order.setSaleOff(orderRequest.getSaleOff());
-        order.setTotalPrice(orderRequest.getTotalPrice());
-        order.setAddress(orderRequest.getAddress());
         order.setName(orderRequest.getName());
         order.setPhoneNumber(orderRequest.getPhoneNumber());
+        order.setAddress(orderRequest.getAddress());
+
+//        Calculate order_price
+        order.setVoucher(orderRequest.getVoucher());
+        order.setFeeShip(orderRequest.getFeeShip());
+        order.setVat(orderRequest.getVat());
+        order.setTotalPrice(orderRequest.getTotalPrice());
+//        Calculate order_price
+        float vat = Float.parseFloat(orderRequest.getVat());
+        float feeShip = Float.parseFloat(orderRequest.getFeeShip());
+        float voucher = Float.parseFloat(orderRequest.getVoucher());
+        float totalPrice = Float.parseFloat(orderRequest.getTotalPrice());
+        float orderPrice = totalPrice + feeShip + totalPrice * vat - totalPrice * voucher;
+
+        order.setOrderPrice(String.valueOf(orderPrice));
+        order.setPaymentStatus(orderRequest.getPaymentStatus());
+        order.setPaymentType(orderRequest.getPaymentType());
+
+//        Send email to user
         order.setEmail(orderRequest.getEmail());
         String randomNumber = emailService.createRandomNumber();
         order.setNumber(randomNumber);
@@ -95,6 +110,8 @@ public class OrderController {
         }
         orderRepository.save(order);
         lineItemRepository.deleteAllByWishListId(wishList.getId());
+
+//        Send mail
         emailService.sendMail(order.getEmail(), randomNumber);
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
