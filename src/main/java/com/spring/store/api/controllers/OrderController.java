@@ -74,7 +74,7 @@ public class OrderController {
 
         order.setOrderPrice(String.valueOf(orderPrice));
         order.setPaymentStatus(orderRequest.getPaymentStatus());
-        order.setPaymentStatus(orderRequest.getPaymentType());
+        order.setPaymentType(orderRequest.getPaymentType());
 
 //        Send email to user
         order.setEmail(orderRequest.getEmail());
