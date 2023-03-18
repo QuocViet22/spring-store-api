@@ -68,4 +68,7 @@ public class Order extends BaseModel {
 
     @Column(name = "order_price")
     private String orderPrice;
+
+    @Column(name = "transaction_code")
+    private String transactionCode;
 }
