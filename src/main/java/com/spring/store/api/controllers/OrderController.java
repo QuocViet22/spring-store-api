@@ -75,6 +75,7 @@ public class OrderController {
         order.setOrderPrice(String.valueOf(orderPrice));
         order.setPaymentStatus(orderRequest.getPaymentStatus());
         order.setPaymentType(orderRequest.getPaymentType());
+        order.setTransactionCode(orderRequest.getTransactionCode());
 
 //        Send email to user
         order.setEmail(orderRequest.getEmail());
@@ -152,6 +153,7 @@ public class OrderController {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Order with id = " + orderId));
         order.setStatus(orderRequest.getStatus());
         order.setModifiedDate(orderRequest.getModifiedDate());
+        order.setPaymentStatus(orderRequest.getPaymentStatus());
         List<LineItemOrder> lineItemOrders = lineItemOrderRepository.findByOrderId(orderId);
         for (int i = 0; i < lineItemOrders.size(); i++) {
             if (Integer.valueOf(orderRequest.getStatus()) == 0) {
