@@ -166,6 +166,16 @@ public class OrderController {
                 int productInforAmount = Integer.valueOf(productInfor.getAmount());
                 productInfor.setAmount(String.valueOf(productInforAmount + lineItemOrdersAmount));
                 productInforRepository.save(productInfor);
+            } else if (Integer.valueOf(order.getStatus()) == 0) {
+                Product product = lineItemOrders.get(i).getProduct();
+                String size = lineItemOrders.get(i).getSize();
+                Long productId = Long.valueOf(product.getId());
+                ProductInfor productInfor = productInforRepository.findBySizeAndProductId(size, productId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product id: " + productId + " and size id: " + size));
+                int lineItemOrdersAmount = Integer.valueOf(lineItemOrders.get(i).getAmount());
+                int productInforAmount = Integer.valueOf(productInfor.getAmount());
+                productInfor.setAmount(String.valueOf(productInforAmount - lineItemOrdersAmount));
+                productInforRepository.save(productInfor);
             }
         }
         orderRepository.save(order);
