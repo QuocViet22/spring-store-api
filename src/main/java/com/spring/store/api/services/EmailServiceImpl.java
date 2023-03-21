@@ -29,6 +29,22 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public String sendMailForgetPassword(String email, String number) {
+        // Create a Simple MailMessage.
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(email);
+        message.setSubject("E-Shop email");
+        message.setText("Thank you for using our services in E-Shop!\n" +
+                "This is new password for your account.\n" +
+                "Your new password is " + number);
+
+        // Send Message!
+        this.javaMailSender.send(message);
+        return "Email Sent!";
+    }
+
+    @Override
     public String createRandomNumber() {
         // It will generate 6 digit random Number.
         // from 0 to 999999

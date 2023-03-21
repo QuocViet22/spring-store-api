@@ -139,7 +139,7 @@ public class AccountController {
         String phone = forgetPasswordRequest.getPhone();
         String email = forgetPasswordRequest.getEmail();
         IForgetPassword iForgetPassword = accountRepository.forgetPassword(userName, phone, email);
-        if (iForgetPassword==null){
+        if (iForgetPassword == null) {
             return ResponseEntity.badRequest().body(new MessageResponse("Account not found. Please check again!"));
         }
         Account account = accountRepository.findByUsername(iForgetPassword.getUserName())
@@ -149,7 +149,7 @@ public class AccountController {
         account.setPassword(encoder.encode(newPassword));
         accountRepository.save(account);
         //  Send mail
-        emailService.sendMail(email, newPassword);
+        emailService.sendMailForgetPassword(email, newPassword);
         return ResponseEntity.ok().body(new MessageResponse("New password has been sent to your email!"));
     }
 }
