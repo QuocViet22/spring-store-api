@@ -5,14 +5,18 @@ import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.Account;
 import com.spring.store.api.models.ERole;
 import com.spring.store.api.models.Role;
+import com.spring.store.api.payload.request.ForgetPasswordRequest;
 import com.spring.store.api.payload.request.UpdateAccountRequest;
 import com.spring.store.api.payload.response.MessageResponse;
 
+import com.spring.store.api.projection.IForgetPassword;
 import com.spring.store.api.repository.RoleRepository;
+import com.spring.store.api.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +42,9 @@ public class AccountController {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    private EmailService emailService;
 
     //    get all accounts
     @GetMapping("/accounts")
@@ -123,6 +130,27 @@ public class AccountController {
         account.setRoles(roles);
         accountRepository.save(account);
         return ResponseEntity.ok().body(new MessageResponse("Account has been updated successfully!"));
+    }
+
+    //    forget password
+    @PutMapping("/accounts/forgetPasword")
+    public ResponseEntity<?> forgetPassword(@RequestBody ForgetPasswordRequest forgetPasswordRequest) {
+        String userName = forgetPasswordRequest.getUserName();
+        String phone = forgetPasswordRequest.getPhone();
+        String email = forgetPasswordRequest.getEmail();
+        IForgetPassword iForgetPassword = accountRepository.forgetPassword(userName, phone, email);
+        if (iForgetPassword==null){
+            return ResponseEntity.badRequest().body(new MessageResponse("Account not found. Please check again!"));
+        }
+        Account account = accountRepository.findByUsername(iForgetPassword.getUserName())
+                .orElseThrow(() -> new UsernameNotFoundException("Account Not Found with username: " + iForgetPassword.getUserName()));
+        //  Update password
+        String newPassword = emailService.createRandomNumber();
+        account.setPassword(encoder.encode(newPassword));
+        accountRepository.save(account);
+        //  Send mail
+        emailService.sendMail(email, newPassword);
+        return ResponseEntity.ok().body(new MessageResponse("New password has been sent to your email!"));
     }
 }
 
