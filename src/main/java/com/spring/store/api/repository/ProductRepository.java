@@ -18,16 +18,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT p.* FROM Products p " +
             "INNER JOIN Product_infors i ON p.id = i.product_id " +
-            "WHERE i.size=(?1) AND CAST(i.amount as INTEGER)>0;", nativeQuery = true)
+            "WHERE i.size=(?1);", nativeQuery = true)
     List<Product> findProductBySize(String size);
 
     @Query(value = "SELECT p.* FROM Products p " +
-            "WHERE CAST(p.price as INTEGER)<=(?1) AND CAST(i.amount as INTEGER)>0;", nativeQuery = true)
+            "WHERE CAST(p.price as INTEGER)<=(?1);", nativeQuery = true)
     List<Product> findProductByPrice(int price);
 
     @Query(value = "select p.*\n" +
             "from products p inner join product_infors i on p.id = i.product_id\n" +
-            "where CAST(p.price as INTEGER)<=(?1) and i.size=(?2) AND CAST(i.amount as INTEGER)>0;", nativeQuery = true)
+            "where CAST(p.price as INTEGER)<=(?1) and i.size=(?2);", nativeQuery = true)
     List<Product> findProductByPriceAndSize(int price, String size);
 
 }
