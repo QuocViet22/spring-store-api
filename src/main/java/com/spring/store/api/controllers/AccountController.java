@@ -133,7 +133,7 @@ public class AccountController {
     }
 
     //    forget password
-    @PutMapping("/accounts/forgetPasword")
+    @PostMapping("/accounts/forgetPasword")
     public ResponseEntity<?> forgetPassword(@RequestBody ForgetPasswordRequest forgetPasswordRequest) {
         String userName = forgetPasswordRequest.getUserName();
         String phone = forgetPasswordRequest.getPhone();
