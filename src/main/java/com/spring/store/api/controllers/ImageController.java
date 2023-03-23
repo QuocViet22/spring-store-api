@@ -33,8 +33,8 @@ public class ImageController {
         if (!productRepository.existsById(productId)) {
             throw new ResourceNotFoundException("Not found Product with id = " + productId);
         }
-//        List<Image> images = imageRepository.findByProductId(productId);
-        List<Image> images = imageRepository.orderByProductId("wtf");
+        List<Image> images = imageRepository.findByProductId(productId);
+//        List<Image> images = imageRepository.orderByProductId("wtf");
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 

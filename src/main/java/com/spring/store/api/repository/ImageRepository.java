@@ -11,12 +11,12 @@ import java.util.List;
 public interface ImageRepository extends JpaRepository<Image, Long> {
     List<Image> findByProductId(Long productId);
 
-//    @Query(value = "select i.*\n" +
+    //    @Query(value = "select i.*\n" +
 //            "from images i\n" +
 //            "where i.link LIKE CONCAT('%', ?1, '%')\n", nativeQuery = true)
-    @Query(value = "SELECT i.* " +
-            "FROM Images i " +
-            "WHERE i.product_id=?1 " +
-            "ORDER BY i.id ASC", nativeQuery = true)
+    @Query(value = "SELECT i.*\n" +
+            "FROM Images i\n" +
+            "WHERE i.product_id=?1\n" +
+            "ORDER BY i.id ASC;", nativeQuery = true)
     List<Image> orderByProductId(String link);
 }
