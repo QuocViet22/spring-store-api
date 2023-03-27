@@ -15,6 +15,8 @@ public interface LineItemRepository extends JpaRepository<LineItem, Long> {
 
     boolean existsByProductAndWishListIdAndSize(Product product, Long wishListId, String size);
 
+    LineItem findByProductAndWishListIdAndSize(Product product, Long wishListId, String size);
+
     LineItem findByProductAndWishListId(Product product, Long wishListId);
 
     @Transactional
