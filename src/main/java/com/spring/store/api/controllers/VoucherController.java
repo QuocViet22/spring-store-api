@@ -6,6 +6,10 @@ import com.spring.store.api.payload.request.VoucherRequest;
 import com.spring.store.api.payload.response.MessageResponse;
 import com.spring.store.api.repository.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +29,14 @@ public class VoucherController {
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<Voucher> getAllVouchers() {
         return voucherRepository.findAll();
+    }
+
+    //    get all products pageable
+    @GetMapping("/vouchers/pageable")
+    public Page<Voucher> getAllVouchersPageable(@RequestParam int page,
+                                                @RequestParam int size) {
+        Pageable paging = PageRequest.of(page, size, Sort.by("id"));
+        return voucherRepository.findAll(paging);
     }
 
     //    get voucher by id

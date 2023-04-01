@@ -11,6 +11,10 @@ import com.spring.store.api.repository.ProductRepository;
 
 import com.spring.store.api.repository.SizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +41,14 @@ public class ProductController {
     public List<Product> getAllProducts() {
         return productRepository.findAll();
         //        return productRepository.findAllProduct();
+    }
+
+    //    get all products pageable
+    @GetMapping("/products/pageable")
+    public Page<Product> getAllProductsPageable(@RequestParam int page,
+                                                @RequestParam int size) {
+        Pageable paging = PageRequest.of(page, size, Sort.by("id"));
+        return productRepository.findAll(paging);
     }
 
     //    get all products by size

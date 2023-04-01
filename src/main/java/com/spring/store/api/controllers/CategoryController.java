@@ -6,6 +6,10 @@ import com.spring.store.api.models.Category;
 import com.spring.store.api.payload.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.spring.store.api.repository.CategoryRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +29,14 @@ public class CategoryController {
     // @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public List<Category> getAllCategory() {
         return categoryRepository.findAll();
+    }
+
+    //    get all category pageable
+    @GetMapping("/category/pageable")
+    public Page<Category> getAllCategoryPageable(@RequestParam int page,
+                                                 @RequestParam int size) {
+        Pageable paging = PageRequest.of(page, size, Sort.by("id"));
+        return categoryRepository.findAll(paging);
     }
 
     //    get Category by id

@@ -6,10 +6,11 @@ import com.spring.store.api.models.Account;
 import com.spring.store.api.projection.IForgetPassword;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends PagingAndSortingRepository<Account, Long>, JpaRepository<Account, Long> {
     Optional<Account> findByUsername(String username);
 
     Boolean existsByUsername(String username);

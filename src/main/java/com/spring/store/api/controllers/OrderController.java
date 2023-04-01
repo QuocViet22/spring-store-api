@@ -6,6 +6,10 @@ import com.spring.store.api.repository.*;
 import com.spring.store.api.services.EmailService;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -143,6 +147,14 @@ public class OrderController {
     public ResponseEntity<List<Order>> getListOrder() {
         List<Order> orders = orderRepository.findAll();
         return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    //    get all orders pageable
+    @GetMapping("/orders/pageable")
+    public Page<Order> getListOrderPageable(@RequestParam int page,
+                                            @RequestParam int size) {
+        Pageable paging = PageRequest.of(page, size, Sort.by("id"));
+        return orderRepository.findAll(paging);
     }
 
     //    update order for manager by order_id to confirm
