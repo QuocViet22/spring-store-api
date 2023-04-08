@@ -5,7 +5,7 @@ import com.spring.store.api.models.Order;
 public interface EmailService {
 //    String sendMail(String email, String number);
 
-    String sendMailForgetPassword(String email, String newPassword);
+    String sendMailForgetPassword(String name, String email, String newPassword);
 
     String createRandomNumber();
 

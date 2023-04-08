@@ -161,7 +161,7 @@ public class AccountController {
         account.setPassword(encoder.encode(newPassword));
         accountRepository.save(account);
         //  Send mail
-        emailService.sendMailForgetPassword(email, newPassword);
+        emailService.sendMailForgetPassword(account.getUsername(),email, newPassword);
         return ResponseEntity.ok().body(new MessageResponse("New password has been sent to your email!"));
     }
 }

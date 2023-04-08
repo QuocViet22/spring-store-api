@@ -1,7 +1,6 @@
 package com.spring.store.api.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -20,37 +19,24 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
-//    @Override
-//    public String sendMail(String email, String number) {
-//        // Create a Simple MailMessage.
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(email);
-//        message.setSubject("E-Shop email");
-//        message.setText("Thank you for shopping in E-Shop!\n" +
-//                "Your order include " +
-//                "Please keep this code in order to receive your shoes.\n" +
-//                "Your code is " + number);
-//        // Send Message!
-//        this.javaMailSender.send(message);
-//        return "Email Sent!";
-//    }
-
     @Override
-    public String sendMailForgetPassword(String email, String number) {
-        // Create a Simple MailMessage.
-        SimpleMailMessage message = new SimpleMailMessage();
-
-        message.setTo(email);
-        message.setSubject("E-Shop email");
-        message.setText("Thank you for using our services in E-Shop!\n" +
-                "This is new password for your account.\n" +
-                "Your new password is " + number);
-
-        // Send Message!
-        this.javaMailSender.send(message);
+    public String sendMailForgetPassword(String name, String email, String number) {
+        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+                messageHelper.setFrom("tlcn092022@gmail.com");
+                messageHelper.setTo(email);
+                messageHelper.setSubject("E-Shop email");
+                Context context = new Context();
+                context.setVariable("name", name);
+                context.setVariable("number", number);
+                String content = templateEngine.process("reset_password", context);
+                messageHelper.setText(content, true);
+            }
+        };
+        this.javaMailSender.send(preparator);
         return "Email Sent!";
     }
-
     @Override
     public String createRandomNumber() {
         // It will generate 6 digit random Number.
