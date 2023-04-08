@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>A simple, clean, and responsive HTML invoice template</title>
+    <style>
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            font-size: 16px;
+            line-height: 24px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+
+        .button {
+            background-color: rgb(230, 242, 255);
+            border-radius: 5px;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition-duration: 0.4s;
+        }
+
+        .button:hover {
+            background-color: rgb(204, 230, 255); /* Green */
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+<div class="invoice-box">
+    <h2>E-SHOP</h2>
+    <h3>Your order will delivery early!</h3>
+    <div style="background-color: rgb(235, 237, 236); padding: 10px; border-radius: 10px;">
+        <h4>
+            Created Date: <span th:text="${createdDate}"></span> <br><br>
+            Estimated Delivery Date: <br><br>
+            Address: <span th:text="${address}"></span><br><br>
+            Receiver: <span th:text="${name}"></span> <br>
+        </h4>
+        <h3>Follow your order</h3>
+        <button class="button"><span th:text="${link}"></span></button>
+    </div>
+    <br>
+    <div style="background-color: rgb(80, 80, 80); padding: 10px; border-radius: 10px; color: white;">
+        <div className="">
+            <p className="mb-0"><strong>Location: </strong>1St, Vo Van Ngan, Thu Duc City</p>
+            <p><strong>Support Email: </strong> TLCN@gmail.com</p>
+        </div>
+        <h4 className="mb-4">Opening Hours</h4>
+        <ul className="pl-0 list-unstyled mb-5">
+            <li className="d-lg-flex justify-content-between">Monday-Friday <span>8.00-20.00</span></li>
+            <li className="d-lg-flex justify-content-between">Saturday <span>10.00-20.00</span></li>
+            <li className="d-lg-flex justify-content-between">Sunday <span>12.00-20.00</span></li>
+        </ul>
+        <h5>Call Now: +(84) 94 529 1068</h5>
+    </div>
+</div>
+</body>
+
+</html>

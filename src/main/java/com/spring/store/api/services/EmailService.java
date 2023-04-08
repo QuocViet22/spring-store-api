@@ -1,9 +1,13 @@
 package com.spring.store.api.services;
 
-public interface EmailService {
-    String sendMail(String email, String number);
+import com.spring.store.api.models.Order;
 
-    String sendMailForgetPassword(String email, String number);
+public interface EmailService {
+//    String sendMail(String email, String number);
+
+    String sendMailForgetPassword(String email, String newPassword);
 
     String createRandomNumber();
+
+    String sendMail(String name, String email, String address, String orderId, String createdDate);
 }

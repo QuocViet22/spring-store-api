@@ -4,7 +4,6 @@ import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.*;
 import com.spring.store.api.repository.*;
 import com.spring.store.api.services.EmailService;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -83,7 +79,7 @@ public class OrderController {
 
 //        Send email to user
         order.setEmail(orderRequest.getEmail());
-        String randomNumber = emailService.createRandomNumber();
+        String randomNumber = "000000";
         order.setNumber(randomNumber);
         orderRepository.save(order);
 
@@ -117,7 +113,7 @@ public class OrderController {
         lineItemRepository.deleteAllByWishListId(wishList.getId());
 
 //        Send mail
-        emailService.sendMail(order.getEmail(), randomNumber);
+        emailService.sendMail(order.getName(), order.getEmail(), order.getAddress(), order.getId().toString(), order.getCreatedDate());
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
 
