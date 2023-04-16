@@ -55,6 +55,7 @@ public class OrderController {
         order.setCreatedDate(orderRequest.getCreatedDate());
         order.setModifiedBy(orderRequest.getModifiedBy());
         order.setModifiedDate(orderRequest.getModifiedDate());
+        order.setEstimatedDate(orderRequest.getEstimatedDate());
         order.setStatus(orderRequest.getStatus());
         order.setName(orderRequest.getName());
         order.setPhoneNumber(orderRequest.getPhoneNumber());
