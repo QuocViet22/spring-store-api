@@ -9,5 +9,5 @@ public interface EmailService {
 
     String createRandomNumber();
 
-    String sendMail(String name, String email, String address, String orderId, String createdDate);
+    String sendMail(String name, String email, String address, String orderId, String createdDate, String estimatedDate);
 }

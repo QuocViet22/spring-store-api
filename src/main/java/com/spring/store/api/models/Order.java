@@ -71,4 +71,7 @@ public class Order extends BaseModel {
 
     @Column(name = "transaction_code")
     private String transactionCode;
+
+    @Column(name = "estimated_date")
+    private String estimatedDate;
 }

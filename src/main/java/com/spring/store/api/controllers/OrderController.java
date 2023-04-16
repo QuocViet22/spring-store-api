@@ -113,7 +113,7 @@ public class OrderController {
         lineItemRepository.deleteAllByWishListId(wishList.getId());
 
 //        Send mail
-        emailService.sendMail(order.getName(), order.getEmail(), order.getAddress(), order.getId().toString(), order.getCreatedDate());
+        emailService.sendMail(order.getName(), order.getEmail(), order.getAddress(), order.getId().toString(), order.getCreatedDate(), order.getEstimatedDate());
         return new ResponseEntity<Order>(order, HttpStatus.OK);
     }
 

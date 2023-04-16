@@ -48,7 +48,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public String sendMail(String name, String email, String address, String orderId, String createdDate) {
+    public String sendMail(String name, String email, String address, String orderId, String createdDate, String estimatedDate) {
         MimeMessagePreparator preparator = new MimeMessagePreparator() {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -58,6 +58,7 @@ public class EmailServiceImpl implements EmailService {
                 Context context = new Context();
                 context.setVariable("address", address);
                 context.setVariable("name", name);
+                context.setVariable("estimatedDate", estimatedDate);
                 String link = "https://shoe-store-van-viet.vercel.app/order-detail/" + orderId;
                 context.setVariable("link", link);
                 context.setVariable("createdDate", createdDate);
