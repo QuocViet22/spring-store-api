@@ -1,14 +1,14 @@
 package com.spring.store.api.controllers;
 
 import com.spring.store.api.exception.ResourceNotFoundException;
-import com.spring.store.api.models.Category;
 import com.spring.store.api.models.Product;
 import com.spring.store.api.payload.request.FilterProductRequest;
+import com.spring.store.api.payload.response.AIResponse;
+import com.spring.store.api.payload.response.DetailProductResponse;
 import com.spring.store.api.payload.response.MessageResponse;
-import com.spring.store.api.projection.IFilterProductResponse;
+import com.spring.store.api.projection.IRecommendProduct;
 import com.spring.store.api.repository.CategoryRepository;
 import com.spring.store.api.repository.ProductRepository;
-
 import com.spring.store.api.repository.SizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,8 +19,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -34,6 +38,9 @@ public class ProductController {
 
     @Autowired
     private SizeRepository sizeRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     //    get all products
     @GetMapping("/products")
@@ -99,11 +106,45 @@ public class ProductController {
     //    retrieve a Product by product_id
     @GetMapping("/product/{id}")
     //    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<Product> getProductsByCategoryId(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<DetailProductResponse> getProductsByCategoryId(@PathVariable(value = "id") Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + id));
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        String productName = product.getName();
+        ResponseEntity<AIResponse> entity = restTemplate.getForEntity("/?name=" + productName, AIResponse.class);
+        String recommend_products = entity.getBody().getRecommend_products();
+        String parts[] = recommend_products.split(",");
+        List<IRecommendProduct> iRecommendProducts = productRepository.recommendProducts(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]), Long.parseLong(parts[3]), Long.parseLong(parts[4]));
+        DetailProductResponse detailProductResponse = new DetailProductResponse();
+        Map<Integer, IRecommendProduct> map = new HashMap<>();
+        for (int i = 0; i < iRecommendProducts.size(); i++) {
+            if (!map.containsKey(iRecommendProducts.get(i).getId().intValue())) {
+                map.put(iRecommendProducts.get(i).getId().intValue(), iRecommendProducts.get(i));
+            }
+        }
+        List<IRecommendProduct> list = new ArrayList<IRecommendProduct>(map.values());
+        detailProductResponse.setIRecommendProducts(list);
+        detailProductResponse.setProduct(product);
+        return new ResponseEntity<>(detailProductResponse, HttpStatus.OK);
     }
+
+//    @GetMapping("/testrest")
+//    public ResponseEntity<DetailProductResponse> test() {
+//        String test = "Bitis Hunter X";
+//        ResponseEntity<AIResponse> entity = restTemplate.getForEntity("/?name=" + test, AIResponse.class);
+//        String recommend_products = entity.getBody().getRecommend_products();
+//        String parts[] = recommend_products.split(",");
+//        List<IRecommendProduct> iRecommendProducts = productRepository.recommendProducts(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]), Long.parseLong(parts[3]), Long.parseLong(parts[4]));
+//        DetailProductResponse detailProductResponse = new DetailProductResponse();
+//        Map<Integer, IRecommendProduct> map = new HashMap<>();
+//        for (int i = 0; i < iRecommendProducts.size(); i++) {
+//            if (!map.containsKey(iRecommendProducts.get(i).getId().intValue())) {
+//                map.put(iRecommendProducts.get(i).getId().intValue(), iRecommendProducts.get(i));
+//            }
+//        }
+//        List<IRecommendProduct> list = new ArrayList<IRecommendProduct>(map.values());
+//        detailProductResponse.setIRecommendProducts(list);
+//        return new ResponseEntity<>(detailProductResponse, HttpStatus.OK);
+//    }
 
     //    create new Product of a Category
     @PostMapping("/category/{categoryId}/products")
