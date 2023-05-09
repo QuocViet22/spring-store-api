@@ -138,6 +138,14 @@ public class OrderController {
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
+    //    retrieve order by order_id
+    @GetMapping("/order/chatbot/{orderId}")
+    public ResponseEntity<Order> getOrderByOrderIdForChatBot(@PathVariable(value = "orderId") Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Order with id = " + orderId));
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
     //    retrieve list of all order
     @GetMapping("/orders")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
