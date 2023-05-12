@@ -13,6 +13,9 @@ import java.util.List;
 public interface ProductRepository extends PagingAndSortingRepository<Product, Long>, JpaRepository<Product, Long> {
     List<Product> findByCategoryId(Long categoryId);
 
+    @Query(value = "SELECT p.* FROM Products p WHERE p.status = '1'", nativeQuery = true)
+    List<Product> getActiveProducts();
+
     Boolean existsByName(String name);
 
     @Query(value = "SELECT p.* FROM Products p INNER JOIN Images i ON p.id = i.product_id GROUP BY p.id", nativeQuery = true)

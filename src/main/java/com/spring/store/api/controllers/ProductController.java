@@ -66,17 +66,6 @@ public class ProductController {
         //        return productRepository.findAllProduct();
     }
 
-    //    get all product by size and price
-//    public List<Product> getAllProductsBySizeAndPrice(@RequestBody FilterProductRequest filterProductRequest) {
-//        //        return productRepository.findAllProduct();
-//
-//        if (filterProductRequest.getSize() == null) {
-//            return productRepository.findProductByPrice(filterProductRequest.getPrice());
-//        } else if (filterProductRequest.getPrice() == null) {
-//            return productRepository.findProductBySize(filterProductRequest.getSize());
-//        } else
-//            return productRepository.findProductBySizeAndPrice(filterProductRequest.getSize(), filterProductRequest.getPrice());
-//    }
     @PostMapping("/products/filter")
     public List<Product> getAllProductsBySizeAndPrice(@RequestBody FilterProductRequest filterProductRequest) {
         //        return productRepository.findAllProduct();
@@ -127,24 +116,11 @@ public class ProductController {
         return new ResponseEntity<>(detailProductResponse, HttpStatus.OK);
     }
 
-//    @GetMapping("/testrest")
-//    public ResponseEntity<DetailProductResponse> test() {
-//        String test = "Bitis Hunter X";
-//        ResponseEntity<AIResponse> entity = restTemplate.getForEntity("/?name=" + test, AIResponse.class);
-//        String recommend_products = entity.getBody().getRecommend_products();
-//        String parts[] = recommend_products.split(",");
-//        List<IRecommendProduct> iRecommendProducts = productRepository.recommendProducts(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]), Long.parseLong(parts[3]), Long.parseLong(parts[4]));
-//        DetailProductResponse detailProductResponse = new DetailProductResponse();
-//        Map<Integer, IRecommendProduct> map = new HashMap<>();
-//        for (int i = 0; i < iRecommendProducts.size(); i++) {
-//            if (!map.containsKey(iRecommendProducts.get(i).getId().intValue())) {
-//                map.put(iRecommendProducts.get(i).getId().intValue(), iRecommendProducts.get(i));
-//            }
-//        }
-//        List<IRecommendProduct> list = new ArrayList<IRecommendProduct>(map.values());
-//        detailProductResponse.setIRecommendProducts(list);
-//        return new ResponseEntity<>(detailProductResponse, HttpStatus.OK);
-//    }
+    //    get all products pageable
+    @GetMapping("/products/active")
+    public List<Product> getAllActiveProducts() {
+        return productRepository.getActiveProducts();
+    }
 
     //    create new Product of a Category
     @PostMapping("/category/{categoryId}/products")
