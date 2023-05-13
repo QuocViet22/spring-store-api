@@ -96,26 +96,25 @@ public class ProductController {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + id));
         DetailProductResponse detailProductResponse = new DetailProductResponse();
-        if (product.getStatus() == "1") {
+        Map<Integer, IRecommendProduct> map = new HashMap<>();
+        List<IRecommendProduct> list;
+        if (product.getStatus().equals("0")) {
+            list = null;
+        } else {
             String productName = product.getName();
             ResponseEntity<AIResponse> entity = restTemplate.getForEntity("/?name=" + productName, AIResponse.class);
             String recommend_products = entity.getBody().getRecommend_products();
             String parts[] = recommend_products.split(",");
             List<IRecommendProduct> iRecommendProducts = productRepository.recommendProducts(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]), Long.parseLong(parts[3]), Long.parseLong(parts[4]));
-            Map<Integer, IRecommendProduct> map = new HashMap<>();
             for (int i = 0; i < iRecommendProducts.size(); i++) {
                 if (!map.containsKey(iRecommendProducts.get(i).getId().intValue())) {
                     map.put(iRecommendProducts.get(i).getId().intValue(), iRecommendProducts.get(i));
                 }
             }
-            List<IRecommendProduct> list = new ArrayList<IRecommendProduct>(map.values());
-            detailProductResponse.setIRecommendProducts(list);
-            detailProductResponse.setProduct(product);
-        } else if (product.getStatus() == "0") {
-            detailProductResponse.setProduct(product);
-            List<IRecommendProduct> list = null;
-            detailProductResponse.setIRecommendProducts(list);
+            list = new ArrayList<IRecommendProduct>(map.values());
         }
+        detailProductResponse.setProduct(product);
+        detailProductResponse.setIRecommendProducts(list);
         return new ResponseEntity<>(detailProductResponse, HttpStatus.OK);
     }
 
