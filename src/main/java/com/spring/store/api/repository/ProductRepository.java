@@ -2,6 +2,8 @@ package com.spring.store.api.repository;
 
 import com.spring.store.api.models.Product;
 import com.spring.store.api.projection.IRecommendProduct;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;

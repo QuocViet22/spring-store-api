@@ -54,7 +54,7 @@ public class ProductController {
     @GetMapping("/products/pageable")
     public Page<Product> getAllProductsPageable(@RequestParam int page,
                                                 @RequestParam int size) {
-        Pageable paging = PageRequest.of(page, size, Sort.by("id"));
+        Pageable paging = PageRequest.of(page, size, Sort.by("status").descending());
         return productRepository.findAll(paging);
     }
 
@@ -111,7 +111,7 @@ public class ProductController {
             List<IRecommendProduct> list = new ArrayList<IRecommendProduct>(map.values());
             detailProductResponse.setIRecommendProducts(list);
             detailProductResponse.setProduct(product);
-        } else {
+        } else if (product.getStatus() == "0") {
             detailProductResponse.setProduct(product);
             List<IRecommendProduct> list = null;
             detailProductResponse.setIRecommendProducts(list);
@@ -120,10 +120,10 @@ public class ProductController {
     }
 
     //    get all products pageable
-    @GetMapping("/products/active")
-    public List<Product> getAllActiveProducts() {
-        return productRepository.getActiveProducts();
-    }
+    //  @GetMapping("/products/active")
+    //  public List<Product> getAllActiveProducts() {
+    //  return productRepository.getActiveProducts();
+    //}
 
     //    create new Product of a Category
     @PostMapping("/category/{categoryId}/products")
