@@ -68,9 +68,6 @@ public class ProductController {
 
     @PostMapping("/products/filter")
     public List<Product> getAllProductsBySizeAndPrice(@RequestBody FilterProductRequest filterProductRequest) {
-        //        return productRepository.findAllProduct();
-//        List<IFilterProductResponse> iFilterProductResponses = productRepository.findProductBySizeAndPrice(filterProductRequest.getSize(), filterProductRequest.getPrice());
-//        return iFilterProductResponses;
         if (filterProductRequest.getSize() == null && filterProductRequest.getPrice() == 0)
             return productRepository.findAll();
         else if (filterProductRequest.getSize() == null) {
