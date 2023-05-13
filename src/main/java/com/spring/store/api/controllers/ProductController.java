@@ -98,21 +98,27 @@ public class ProductController {
     public ResponseEntity<DetailProductResponse> getProductsByCategoryId(@PathVariable(value = "id") Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Product with id = " + id));
-        String productName = product.getName();
-        ResponseEntity<AIResponse> entity = restTemplate.getForEntity("/?name=" + productName, AIResponse.class);
-        String recommend_products = entity.getBody().getRecommend_products();
-        String parts[] = recommend_products.split(",");
-        List<IRecommendProduct> iRecommendProducts = productRepository.recommendProducts(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]), Long.parseLong(parts[3]), Long.parseLong(parts[4]));
         DetailProductResponse detailProductResponse = new DetailProductResponse();
-        Map<Integer, IRecommendProduct> map = new HashMap<>();
-        for (int i = 0; i < iRecommendProducts.size(); i++) {
-            if (!map.containsKey(iRecommendProducts.get(i).getId().intValue())) {
-                map.put(iRecommendProducts.get(i).getId().intValue(), iRecommendProducts.get(i));
+        if (product.getStatus() == "1") {
+            String productName = product.getName();
+            ResponseEntity<AIResponse> entity = restTemplate.getForEntity("/?name=" + productName, AIResponse.class);
+            String recommend_products = entity.getBody().getRecommend_products();
+            String parts[] = recommend_products.split(",");
+            List<IRecommendProduct> iRecommendProducts = productRepository.recommendProducts(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]), Long.parseLong(parts[3]), Long.parseLong(parts[4]));
+            Map<Integer, IRecommendProduct> map = new HashMap<>();
+            for (int i = 0; i < iRecommendProducts.size(); i++) {
+                if (!map.containsKey(iRecommendProducts.get(i).getId().intValue())) {
+                    map.put(iRecommendProducts.get(i).getId().intValue(), iRecommendProducts.get(i));
+                }
             }
+            List<IRecommendProduct> list = new ArrayList<IRecommendProduct>(map.values());
+            detailProductResponse.setIRecommendProducts(list);
+            detailProductResponse.setProduct(product);
+        } else {
+            detailProductResponse.setProduct(product);
+            List<IRecommendProduct> list = null;
+            detailProductResponse.setIRecommendProducts(list);
         }
-        List<IRecommendProduct> list = new ArrayList<IRecommendProduct>(map.values());
-        detailProductResponse.setIRecommendProducts(list);
-        detailProductResponse.setProduct(product);
         return new ResponseEntity<>(detailProductResponse, HttpStatus.OK);
     }
 
