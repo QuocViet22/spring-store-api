@@ -10,8 +10,6 @@ import com.spring.store.api.projection.IRevenueByMonthResponse;
 import com.spring.store.api.projection.IRevenuePerMonthResponse;
 import com.spring.store.api.repository.RevenueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +39,7 @@ public class RevenueController {
 
     //    retrieve revenue by month
     @PostMapping("/revenue/month")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public RevenueByMonthResponse getRevenueByMonth(@RequestBody RevenueByMonthRequest revenueByMonthRequest) {
         List<IRevenueByMonthResponse> iRevenueByMonthResponses = revenueRepository.viewRevenueByMonth(revenueByMonthRequest.getMonth(), revenueByMonthRequest.getYear());
         RevenueByMonthResponse revenueByMonthResponse = new RevenueByMonthResponse();
