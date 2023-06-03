@@ -29,6 +29,9 @@ public class LineItemOrder {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "product_price")
+    private String productPrice;
+
     @OneToOne(fetch = FetchType.LAZY/*, cascade = CascadeType.ALL*/)
     @JoinColumn(name = "product_id")
     private Product product;

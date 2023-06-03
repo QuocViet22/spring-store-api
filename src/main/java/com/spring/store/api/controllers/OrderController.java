@@ -108,6 +108,10 @@ public class OrderController {
             lineItemOrder.setStatus(lineItems.get(i).getStatus());
 //            lineItems.get(i).setStatus("1");
             lineItemOrder.setTotal(lineItems.get(i).getTotal());
+            float totalLineItem = Float.parseFloat(lineItems.get(i).getTotal());
+            float amount = Float.parseFloat(lineItems.get(i).getAmount());
+            float productPrice = totalLineItem / amount;
+            lineItemOrder.setProductPrice(String.valueOf(productPrice));
             lineItemOrderRepository.save(lineItemOrder);
         }
         orderRepository.save(order);
