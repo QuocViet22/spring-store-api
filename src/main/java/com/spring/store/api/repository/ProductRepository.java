@@ -2,8 +2,6 @@ package com.spring.store.api.repository;
 
 import com.spring.store.api.models.Product;
 import com.spring.store.api.projection.IRecommendProduct;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -17,6 +15,9 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
 
     @Query(value = "SELECT p.* FROM Products p WHERE p.status = '1'", nativeQuery = true)
     List<Product> getActiveProducts();
+
+    @Query(value = "SELECT p.* FROM Products p WHERE LOWER(p.name) LIKE CONCAT('%', ?1,'%');", nativeQuery = true)
+    List<Product> findProductsByName(String name);
 
     Boolean existsByName(String name);
 

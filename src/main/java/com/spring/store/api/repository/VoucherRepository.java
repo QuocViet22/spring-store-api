@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface VoucherRepository extends PagingAndSortingRepository<Voucher, Long>, JpaRepository<Voucher, Long> {
     @Query(value = "select v.*\n" +
             "from vouchers v\n" +
-            "where v.name LIKE CONCAT('%', ?1,'%');", nativeQuery = true)
+            "where LOWER(v.name) LIKE CONCAT('%', ?1,'%');", nativeQuery = true)
     Optional<Voucher> findByName(String name);
 }

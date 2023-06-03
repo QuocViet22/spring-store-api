@@ -50,6 +50,14 @@ public class ProductController {
         //        return productRepository.findAllProduct();
     }
 
+    //    get all products
+    @GetMapping("/products/name")
+    //  @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    public List<Product> getAllProductsByName(@RequestParam String name) {
+        return productRepository.findProductsByName(name);
+        //        return productRepository.findAllProduct();
+    }
+
     //    get all products pageable
     @GetMapping("/products/pageable")
     public Page<Product> getAllProductsPageable(@RequestParam int page,
