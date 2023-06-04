@@ -26,12 +26,12 @@ public class VoucherController {
 
     //    get all vouchers
     @GetMapping("/vouchers")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<Voucher> getAllVouchers() {
         return voucherRepository.findAll();
     }
 
-    //    get all products pageable
+    //    get all vouchers pageable
     @GetMapping("/vouchers/pageable")
     public Page<Voucher> getAllVouchersPageable(@RequestParam int page,
                                                 @RequestParam int size) {
