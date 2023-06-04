@@ -76,14 +76,14 @@ public class ProductController {
 
     @PostMapping("/products/filter")
     public List<Product> getAllProductsBySizeAndPrice(@RequestBody FilterProductRequest filterProductRequest) {
-        if (filterProductRequest.getSize() == null && filterProductRequest.getPrice() == 0)
-            return productRepository.findAll();
-        else if (filterProductRequest.getSize() == null) {
-            return productRepository.findProductByPrice(filterProductRequest.getPrice());
-        } else if (filterProductRequest.getPrice() == 0) {
-            return productRepository.findProductBySize(filterProductRequest.getSize());
-        } else
-            return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize(), filterProductRequest.getCategory_id());
+//        if (filterProductRequest.getSize() == null && filterProductRequest.getPrice() == 0)
+//            return productRepository.findAll();
+//        else if (filterProductRequest.getSize() == null) {
+//            return productRepository.findProductByPrice(filterProductRequest.getPrice());
+//        } else if (filterProductRequest.getPrice() == 0) {
+//            return productRepository.findProductBySize(filterProductRequest.getSize());
+//        } else
+        return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize(), filterProductRequest.getCategory_id());
     }
 
     //    retrieve all Products of a Category
