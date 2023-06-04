@@ -20,14 +20,14 @@ public class DataNumberController {
 
     //    get all data numbers
     @GetMapping("/dataNumber")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public List<DataNumber> getAllDataNumbers() {
         return dataNumberRepository.findAll();
     }
 
     //    get data number by name
     @GetMapping("/dataNumber/{name}")
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
     public DataNumber getDataNumber(@PathVariable("name") String name) {
         return dataNumberRepository.findByName(name);
     }

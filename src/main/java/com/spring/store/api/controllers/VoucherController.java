@@ -53,7 +53,8 @@ public class VoucherController {
     @PostMapping("/vouchers/search")
 //    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<Voucher> getVoucherByName(@RequestBody VoucherRequest voucherRequest) {
-        Voucher voucher = voucherRepository.findByName(voucherRequest.getName());
+        Voucher voucher = voucherRepository.findByName(voucherRequest.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Voucher with name: " + voucherRequest.getName()));
         return new ResponseEntity<>(voucher, HttpStatus.OK);
     }
 

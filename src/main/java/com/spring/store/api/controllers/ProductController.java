@@ -3,6 +3,7 @@ package com.spring.store.api.controllers;
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.Product;
 import com.spring.store.api.payload.request.FilterProductRequest;
+import com.spring.store.api.payload.request.FilterRequest;
 import com.spring.store.api.payload.response.AIResponse;
 import com.spring.store.api.payload.response.DetailProductResponse;
 import com.spring.store.api.payload.response.MessageResponse;
@@ -10,6 +11,7 @@ import com.spring.store.api.projection.IRecommendProduct;
 import com.spring.store.api.repository.CategoryRepository;
 import com.spring.store.api.repository.ProductRepository;
 import com.spring.store.api.repository.SizeRepository;
+import com.spring.store.api.specifications.ProductSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +43,29 @@ public class ProductController {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    ProductSpecification productSpecification;
+
+    @GetMapping("/products/multiple/filter")
+    public ResponseEntity<List<Product>> multipleFilter(@RequestBody List<FilterRequest> filterRequests) {
+//        FilterRequest nameLike = new FilterRequest();
+//        nameLike.setField("price");
+//        nameLike.setOperator(QueryOperator.LIKE);
+//        nameLike.setValue("249");
+//
+//        FilterRequest name = new FilterRequest();
+//        name.setField("name");
+//        name.setOperator(QueryOperator.LIKE);
+//        name.setValue("Adidas XPLR White");
+//
+//        List<FilterRequest> filters = new ArrayList<>();
+//        filters.add(nameLike);
+//        filters.add(name);
+
+        List<Product> products = productSpecification.getQueryResult(filterRequests);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 
     //    get all products
     @GetMapping("/products")
@@ -76,14 +101,14 @@ public class ProductController {
 
     @PostMapping("/products/filter")
     public List<Product> getAllProductsBySizeAndPrice(@RequestBody FilterProductRequest filterProductRequest) {
-//        if (filterProductRequest.getSize() == null && filterProductRequest.getPrice() == 0)
-//            return productRepository.findAll();
-//        else if (filterProductRequest.getSize() == null) {
-//            return productRepository.findProductByPrice(filterProductRequest.getPrice());
-//        } else if (filterProductRequest.getPrice() == 0) {
-//            return productRepository.findProductBySize(filterProductRequest.getSize());
-//        } else
-        return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize(), filterProductRequest.getCategory_id());
+        if (filterProductRequest.getSize() == null && filterProductRequest.getPrice() == 0)
+            return productRepository.findAll();
+        else if (filterProductRequest.getSize() == null) {
+            return productRepository.findProductByPrice(filterProductRequest.getPrice());
+        } else if (filterProductRequest.getPrice() == 0) {
+            return productRepository.findProductBySize(filterProductRequest.getSize());
+        } else
+            return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize(), filterProductRequest.getCategory_id());
     }
 
     //    retrieve all Products of a Category
