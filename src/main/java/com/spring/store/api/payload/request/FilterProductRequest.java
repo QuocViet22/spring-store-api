@@ -8,4 +8,5 @@ import lombok.Setter;
 public class FilterProductRequest {
     int price;
     String size;
+    int category_id;
 }

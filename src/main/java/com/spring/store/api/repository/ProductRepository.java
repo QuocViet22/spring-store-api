@@ -35,8 +35,8 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
 
     @Query(value = "select p.*\n" +
             "from products p inner join product_infors i on p.id = i.product_id\n" +
-            "where CAST(p.price as INTEGER)<=(?1) and i.size=(?2);", nativeQuery = true)
-    List<Product> findProductByPriceAndSize(int price, String size);
+            "where CAST(p.price as INTEGER)<=(?1) and i.size=(?2) and p.category_id=(?3);", nativeQuery = true)
+    List<Product> findProductByPriceAndSize(int price, String size, int category_id);
 
     @Query(value = "select p.id as id, p.name as name, p.price as price, i.link as link\n" +
             "from images i join products p\n" +

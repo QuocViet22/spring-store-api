@@ -83,7 +83,7 @@ public class ProductController {
         } else if (filterProductRequest.getPrice() == 0) {
             return productRepository.findProductBySize(filterProductRequest.getSize());
         } else
-            return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize());
+            return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize(), filterProductRequest.getCategory_id());
     }
 
     //    retrieve all Products of a Category
