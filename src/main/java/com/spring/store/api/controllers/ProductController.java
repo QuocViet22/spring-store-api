@@ -2,7 +2,6 @@ package com.spring.store.api.controllers;
 
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.Product;
-import com.spring.store.api.models.ProductInfor;
 import com.spring.store.api.payload.request.FilterProductRequest;
 import com.spring.store.api.payload.request.FilterRequest;
 import com.spring.store.api.payload.response.AIResponse;
@@ -106,7 +105,7 @@ public class ProductController {
         } else if (filterProductRequest.getPrice() == 0) {
             return productRepository.findProductBySize(filterProductRequest.getSize());
         } else
-            return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize(), filterProductRequest.getCategory_id());
+            return productRepository.findProductByPriceAndSize(filterProductRequest.getPrice(), filterProductRequest.getSize());
     }
 
     //    retrieve all Products of a Category
@@ -136,7 +135,7 @@ public class ProductController {
             ResponseEntity<AIResponse> entity = restTemplate.getForEntity("/?name=" + productName, AIResponse.class);
             String recommend_products = entity.getBody().getRecommend_products();
             String parts[] = recommend_products.split(",");
-            List<IRecommendProduct> iRecommendProducts = productRepository.recommendProducts(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]), Long.parseLong(parts[3]), Long.parseLong(parts[4]));
+                List<IRecommendProduct> iRecommendProducts = productRepository.recommendProducts(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]), Long.parseLong(parts[3]), Long.parseLong(parts[4]));
             for (int i = 0; i < iRecommendProducts.size(); i++) {
                 if (!map.containsKey(iRecommendProducts.get(i).getId().intValue())) {
                     map.put(iRecommendProducts.get(i).getId().intValue(), iRecommendProducts.get(i));
