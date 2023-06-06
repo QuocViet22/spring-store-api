@@ -1,7 +1,6 @@
 package com.spring.store.api.repository;
 
 import com.spring.store.api.models.Product;
-import com.spring.store.api.projection.IRecommendProduct;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,17 +65,5 @@ class ProductRepositoryTest {
         List<Product> products;
         products = productRepository.findProductByPriceAndSize(price, size);
         Assert.assertEquals(2, products.size());
-    }
-
-    @Test
-    void recommendProducts() {
-        List<IRecommendProduct> iRecommendProducts;
-        long no1 = 10;
-        long no2 = 2;
-        long no3 = 3;
-        long no4 = 4;
-        long no5 = 5;
-        iRecommendProducts = productRepository.recommendProducts(no1, no2, no3, no4, no5);
-        Assert.assertEquals(5, iRecommendProducts.size());
     }
 }

@@ -16,7 +16,6 @@ import java.util.List;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //@WebMvcTest(VoucherController.class)
 class VoucherControllerTest {
-    private static final String END_POINT_PATH = "/api/vouchers";
 
     @MockBean
     private VoucherRepository voucherRepository;
