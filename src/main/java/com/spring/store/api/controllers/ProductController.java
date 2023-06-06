@@ -2,6 +2,7 @@ package com.spring.store.api.controllers;
 
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.Product;
+import com.spring.store.api.models.ProductInfor;
 import com.spring.store.api.payload.request.FilterProductRequest;
 import com.spring.store.api.payload.request.FilterRequest;
 import com.spring.store.api.payload.response.AIResponse;
@@ -48,23 +49,20 @@ public class ProductController {
     ProductSpecification productSpecification;
 
     @GetMapping("/products/multiple/filter")
-    public ResponseEntity<List<Product>> multipleFilter(@RequestBody List<FilterRequest> filterRequests) {
-//        FilterRequest nameLike = new FilterRequest();
-//        nameLike.setField("price");
-//        nameLike.setOperator(QueryOperator.LIKE);
-//        nameLike.setValue("249");
-//
-//        FilterRequest name = new FilterRequest();
-//        name.setField("name");
-//        name.setOperator(QueryOperator.LIKE);
-//        name.setValue("Adidas XPLR White");
-//
-//        List<FilterRequest> filters = new ArrayList<>();
-//        filters.add(nameLike);
-//        filters.add(name);
-
+    public ResponseEntity<List<Product>> multipleFilter(@RequestBody List<FilterRequest> filterRequests, @RequestParam int category_id, @RequestParam float size) {
         List<Product> products = productSpecification.getQueryResult(filterRequests);
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        List<Product> productView = new ArrayList<>();
+//        for (Product i : products) {
+//            if (i.getCategory().getId().intValue() == category_id) {
+//                for (ProductInfor p : i.getProductInfors()) {
+//                    if (p.getSize().equals((Math.round(size))) {
+//                        System.out.println("A");
+//                        productView.add(i);
+//                    }
+//                }
+//            }
+//        }
+        return new ResponseEntity<>(productView, HttpStatus.OK);
     }
 
     //    get all products
@@ -181,14 +179,9 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@PathVariable("id") long id, @RequestBody Product productRequest) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product Id " + id + "not found"));
-//        Boolean productName = Boolean.valueOf(product.getName());
-//        if (productRepository.existsByName(productRequest.getName()) && productName) {
-//            throw new ResourceNotFoundException("This product's name has been existed!");
-//        }
         product.setName(productRequest.getName());
         product.setPrice(productRequest.getPrice());
         product.setStatus(productRequest.getStatus());
-//        product.setAmount(productRequest.getAmount());
         product.setDescription(productRequest.getDescription());
         product.setCreatedBy(productRequest.getCreatedBy());
         product.setCreatedDate(productRequest.getCreatedDate());

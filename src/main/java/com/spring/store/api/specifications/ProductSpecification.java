@@ -2,6 +2,7 @@ package com.spring.store.api.specifications;
 
 import com.spring.store.api.models.Product;
 import com.spring.store.api.payload.request.FilterRequest;
+import com.spring.store.api.repository.ProductInforRepository;
 import com.spring.store.api.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,6 +17,9 @@ import static org.springframework.data.jpa.domain.Specification.where;
 public class ProductSpecification {
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductInforRepository productInforRepository;
 
     public List<Product> getQueryResult(List<FilterRequest> filters) {
         if (filters.size() > 0) {

@@ -1,5 +1,6 @@
 package com.spring.store.api.repository;
 
+import com.spring.store.api.models.Category;
 import com.spring.store.api.models.Product;
 import com.spring.store.api.projection.IRecommendProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,8 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends PagingAndSortingRepository<Product, Long>, JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+    List<Product> findByCategory(Category category);
+
     List<Product> findByCategoryId(Long categoryId);
 
     @Query(value = "SELECT p.* FROM Products p WHERE p.status = '1'", nativeQuery = true)

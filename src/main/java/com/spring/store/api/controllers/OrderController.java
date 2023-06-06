@@ -2,6 +2,7 @@ package com.spring.store.api.controllers;
 
 import com.spring.store.api.exception.ResourceNotFoundException;
 import com.spring.store.api.models.*;
+import com.spring.store.api.payload.response.MessageResponse;
 import com.spring.store.api.repository.*;
 import com.spring.store.api.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,5 +202,26 @@ public class OrderController {
         }
         orderRepository.save(order);
         return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+
+    //    check amount of orders
+    @PostMapping("/checkAmount/orders/{userId}")
+    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<?> checkAmountOfProduct(@PathVariable(value = "userId") Long userId) {
+        WishList wishList = wishListRepository.findByUserId(userId);
+        List<LineItem> lineItems = lineItemRepository.findByWishListId(wishList.getId());
+        for (int i = 0; i < lineItems.size(); i++) {
+            // Minus amount of product
+            int amountOfLineItem = Integer.parseInt(lineItems.get(i).getAmount());
+            Long productId = Long.valueOf(lineItems.get(i).getProduct().getId());
+            String size = lineItems.get(i).getSize();
+            ProductInfor productInfor = productInforRepository.findBySizeAndProductId(size, productId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found Product infor with Product id: " + productId + " and size id: " + size));
+            int amountOfProduct = Integer.parseInt(productInfor.getAmount());
+            if (amountOfProduct < amountOfLineItem) {
+                throw new ResourceNotFoundException("Product's amount is " + Integer.valueOf(amountOfProduct) + " .Please choose again!");
+            }
+        }
+        return ResponseEntity.ok().body(new MessageResponse("Nothing!"));
     }
 }

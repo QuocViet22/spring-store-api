@@ -45,7 +45,6 @@ public class VoucherController {
     public ResponseEntity<Voucher> getVoucherById(@PathVariable("id") long id) {
         Voucher voucher = voucherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Voucher with id = " + id));
-
         return new ResponseEntity<>(voucher, HttpStatus.OK);
     }
 
